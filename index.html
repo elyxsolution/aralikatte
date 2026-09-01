@@ -343,13 +343,14 @@
             <a href="tel:+917899542233" style="padding:16px 30px;border-radius:999px;border:1px solid rgba(50,0,1,.32);color:#320001;font-size:15px;font-weight:600;transition:background .25s" style-hover="background:rgba(50,0,1,.07);color:#320001">Call to Order</a>
           </div>
         </div>
+        <!-- Map box. The container keeps its original size/radius/border and its
+             striped fill, which now reads as the pre-load state behind the map;
+             position:relative + overflow:hidden clip the iframe to the 24px radius.
+             The iframe is absolutely positioned (inset:0) rather than a flex child
+             so the parent's align-items:center can't collapse its height. -->
         <div data-reveal style="min-height:clamp(300px,38vw,460px);border-radius:24px;border:1px solid rgba(50,0,1,.14);background:repeating-linear-gradient(135deg,#F6DFD0 0 14px,#F0D2BE 14px 28px);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
-          <div style="text-align:center;padding:24px">
-            <div style="width:16px;height:16px;border-radius:50%;background:#9C3B28;margin:0 auto 14px;box-shadow:0 0 0 8px rgba(156,59,40,.16)"></div>
-            <div style="font-family:'DM Serif Display',serif;font-size:clamp(22px,2.6vw,30px);color:#320001;margin-bottom:6px">80 Feet Road</div>
-            <div style="font-size:13.5px;letter-spacing:.16em;text-transform:uppercase;color:#6B4F49;font-weight:600">Subramanyapura, Bengaluru</div>
-            <a href="https://maps.app.goo.gl/4aAoSGyCKxMjMUbf7" target="_blank" rel="noopener" style="display:inline-block;margin-top:22px;padding:13px 24px;border-radius:999px;background:#FFF8F2;border:1px solid rgba(50,0,1,.16);font-size:14px;font-weight:600;color:#320001">Open in Google Maps</a>
-          </div>
+          <iframe title="Map of Aralikatte Cafe, 80 Feet Road, Subramanyapura, Bengaluru" src="https://www.google.com/maps?q=12.8908174,77.5342263+(Aralikatte+Cafe)&amp;z=17&amp;hl=en&amp;output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" allowFullScreen="true" style="position:absolute;inset:0;width:100%;height:100%;max-width:100%;border:0;display:block"></iframe>
+          <a href="https://maps.app.goo.gl/4aAoSGyCKxMjMUbf7" target="_blank" rel="noopener" style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);z-index:1;padding:13px 24px;border-radius:999px;background:#FFF8F2;border:1px solid rgba(50,0,1,.16);font-size:14px;font-weight:600;color:#320001;white-space:nowrap;box-shadow:0 8px 22px rgba(50,0,1,.18)">Open in Google Maps</a>
         </div>
       </div>
     </section>

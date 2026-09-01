@@ -296,8 +296,15 @@
     // .frame img (clipped) and .spill (unclipped ghost + handles) share the
     // same left/top/width/height in frame-%, computed by _applyView(), so the
     // inside-mask crop and the outside-mask spill stay pixel-aligned.
+    // touch-action stays AUTO on the displayed image: on touch devices a
+    // vertical swipe that starts over the photo must scroll the page like any
+    // other passive content. touch-action:none here turned every slot into a
+    // gesture sink and blocked page scrolling on mobile — the pan/resize
+    // gesture lives on .spill (top layer, reframe-only), not on this img, so
+    // only an ACTIVE reframe needs the browser's own gestures suppressed.
     '.frame img{position:absolute;max-width:none;transform:translate(-50%,-50%);' +
-    '  -webkit-user-drag:none;user-select:none;touch-action:none}' +
+    '  -webkit-user-drag:none;user-select:none;touch-action:auto}' +
+    ':host([data-reframe]) .frame img{touch-action:none}' +
     // Reframe mode (double-click): the full image spills past the mask. The
     // spill layer is sized to the IMAGE bounds so its corners are where the
     // resize handles belong. The ghost <img> inside is translucent; the real
@@ -568,7 +575,12 @@
       this._subFn = () => this._render();
       // Shadow-DOM listeners live with the shadow DOM — bound once here so
       // disconnect/reconnect (e.g. React remount) doesn't stack handlers.
-      this._empty.addEventListener('click', () => this._input.click());
+      // Read-only pages must never open a file browser on tap: the empty state
+      // is inert chrome there (it shows for an unset or broken src).
+      this._empty.addEventListener('click', () => {
+        if (!this._canEdit()) return;
+        this._input.click();
+      });
       root.addEventListener('click', (e) => {
         const act = e.target && e.target.getAttribute && e.target.getAttribute('data-act');
         if (!act) return;
@@ -684,7 +696,10 @@
       });
       // Wheel zoom stays available inside reframe mode as a trackpad nicety —
       // zooms toward the cursor (offset' = cursor·(1-k) + offset·k).
-      this.addEventListener('wheel', (e) => {
+      // Held as a field and bound ONLY by _enterReframe: a permanently
+      // registered non-passive wheel listener opts every slot out of the
+      // compositor scroll fast path, on a page where it can never fire.
+      this._onWheel = (e) => {
         if (!this.hasAttribute('data-reframe')) return;
         e.preventDefault();
         const r = this.getBoundingClientRect();
@@ -699,7 +714,15 @@
         this._view.y = cy * (1 - k) + this._view.y * k;
         this._clampView();
         this._applyView();
-      }, { passive: false });
+      };
+    }
+
+    // Editability is re-derived here (not just read off data-editable) so a
+    // host that injects window.omelette.writeFile after the first render still
+    // gets working drop/browse before the next _render lands.
+    _canEdit() {
+      return this.hasAttribute('data-editable') ||
+        !!(window.omelette && window.omelette.writeFile);
     }
 
     connectedCallback() {
@@ -776,6 +799,7 @@
         this._watchId = requestAnimationFrame(this._watch);
       };
       this._watchId = requestAnimationFrame(this._watch);
+      this.addEventListener('wheel', this._onWheel, { passive: false });
       this._applyView();
       // Close on click outside (the spill handler stopPropagation()s so
       // in-image drags don't reach this) and on Escape. Listeners are held
@@ -804,6 +828,7 @@
         this._reposition = null;
       }
       if (this._watchId) { cancelAnimationFrame(this._watchId); this._watchId = 0; }
+      this.removeEventListener('wheel', this._onWheel);
       if (this._pagehide) {
         window.removeEventListener('pagehide', this._pagehide);
         this._pagehide = null;
@@ -855,6 +880,10 @@
     // handleEvent — one listener object for all four drag events keeps the
     // add/remove symmetric and the depth counter correct.
     handleEvent(e) {
+      // Read-only pages don't ingest files: without this the slot would
+      // preventDefault the drag and swallow a dropped image on a public site
+      // that has no way to persist it.
+      if (!this._canEdit()) return;
       if (e.type === 'dragenter' || e.type === 'dragover') {
         // Without preventDefault the browser never fires 'drop'.
         e.preventDefault();
