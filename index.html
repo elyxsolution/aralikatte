@@ -92,7 +92,7 @@
   </sc-if>
 
   <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
-    <header style="position:sticky;top:0;z-index:60;background:rgba(13,13,15,.86);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.12)">
+    <header style="position:sticky;top:0;z-index:60;background:rgba(13,13,15,.86);backdrop-filter:blur(14px);border-bottom:1px solid {{ headerBorder }};box-shadow:{{ headerShadow }};transition:box-shadow .3s ease,border-color .3s ease">
       <div style="max-width:1240px;margin:0 auto;padding:16px clamp(20px,5vw,64px);display:flex;align-items:center;justify-content:space-between;gap:28px">
         <button onClick="{{ goHome }}" aria-label="Aralikatte Cafe — home" style="background:none;border:none;padding:0;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px">
           <img src="./assets/aralikatte-logo.jpg" alt="Aralikatte Cafe logo" width="52" height="52" style="width:52px;height:52px;border-radius:12px;display:block">
@@ -136,7 +136,7 @@
   </sc-if>
 
   <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
-    <header style="position:sticky;top:0;z-index:60;background:rgba(13,13,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.12)">
+    <header style="position:sticky;top:0;z-index:60;background:rgba(13,13,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid {{ headerBorder }};box-shadow:{{ headerShadow }};transition:box-shadow .3s ease,border-color .3s ease">
       <div style="padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px">
         <button onClick="{{ goHome }}" aria-label="Aralikatte Cafe — home" style="background:none;border:none;padding:0;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px">
           <img src="./assets/aralikatte-logo.jpg" alt="Aralikatte Cafe logo" width="40" height="40" style="width:40px;height:40px;border-radius:10px;display:block">
@@ -171,21 +171,23 @@
   <!-- ============================ HOME ============================ -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
   <main>
-    <section style="position:relative;min-height:min(88vh,760px);display:flex;align-items:flex-end;overflow:hidden">
-      <div style="position:absolute;inset:0">
+    <section style="position:relative;min-height:min(94vh,860px);display:flex;align-items:flex-end;overflow:hidden">
+      <div data-parallax data-parallax-speed="0.1" data-parallax-max="34" style="position:absolute;inset:-48px">
         <image-slot id="hero" shape="rect" fit="cover" src="./assets/aralikatte-hero.jpg" placeholder="aralikatte-hero.jpg — full-bleed breakfast spread"></image-slot>
       </div>
-      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,5,6,.58) 0%,rgba(6,5,6,.20) 34%,rgba(13,13,15,.97) 100%);pointer-events:none"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,5,6,.64) 0%,rgba(6,5,6,.26) 32%,rgba(13,13,15,.97) 100%);pointer-events:none"></div>
       <div style="position:relative;width:100%;max-width:1240px;margin:0 auto;padding:clamp(48px,8vw,96px) clamp(20px,5vw,64px);pointer-events:none">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+        <div data-reveal style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
           <span style="width:26px;height:1px;background:rgba(255,255,255,.55)"></span>
-          <span style="font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--text);font-weight:600">South Indian · Pure Vegetarian</span>
+          <span style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--text);font-weight:600">Karnataka Oota · Katte Culture · Music · 100% Vegetarian</span>
         </div>
-        <h1 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(38px,6.4vw,80px);line-height:1.02;letter-spacing:-.02em;color:var(--text-strong);max-width:17ch;text-wrap:pretty">South Indian comfort, served fresh.</h1>
-        <p style="margin:22px 0 0;max-width:50ch;font-size:clamp(15px,1.6vw,18px);line-height:1.65;color:var(--text-2);text-wrap:pretty">Tiffins, dose and filter coffee on 80 Feet Road, Subramanyapura. Open from six in the morning until one after midnight, every day of the week.</p>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:34px;pointer-events:auto">
+        <h1 data-reveal style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(36px,5.8vw,72px);line-height:1.05;letter-spacing:-.02em;color:var(--text-strong);max-width:15ch;text-wrap:pretty">Where Karnataka feels like home.</h1>
+        <p data-reveal style="margin:20px 0 0;max-width:52ch;font-size:clamp(15.5px,1.7vw,18.5px);line-height:1.65;color:var(--text);text-wrap:pretty">A premium South Indian dining experience where authentic food, Katte culture, creativity and music come together.</p>
+        <p data-reveal style="margin:12px 0 0;max-width:56ch;font-size:clamp(13.5px,1.4vw,15.5px);line-height:1.7;color:var(--text-2);text-wrap:pretty">From traditional Karnataka Oota, breakfast and filter coffee to our free Open Mic and Jamming sessions, Aralikatte is a place where families, friends, children and artists come together — eat, sing, connect and celebrate like a festival.</p>
+        <p data-reveal style="margin:22px 0 0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(16px,1.9vw,20px);line-height:1.4;color:var(--red-bright)">Come for the Oota.<br>Stay for the Katte.<br>Leave with a memory.</p>
+        <div data-reveal style="display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;pointer-events:auto">
           <button onClick="{{ goMenu }}" style="padding:17px 30px;border-radius:999px;background:var(--red);color:#fff;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:transform .25s,background .25s" style-hover="background:var(--red-hover);transform:translateY(-2px)">Explore Menu</button>
-          <a href="https://maps.app.goo.gl/4aAoSGyCKxMjMUbf7" target="_blank" rel="noopener" style="padding:17px 30px;border-radius:999px;border:1px solid var(--line-3);color:var(--text-strong);font-size:15px;font-weight:600;transition:background .25s" style-hover="background:rgba(255,255,255,.1);color:var(--text-strong)">Get Directions</a>
+          <button onClick="{{ goStory }}" style="padding:17px 30px;border-radius:999px;border:1px solid var(--line-3);background:transparent;color:var(--text-strong);font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:rgba(255,255,255,.1);color:var(--text-strong)">Discover Aralikatte</button>
         </div>
       </div>
     </section>
@@ -275,18 +277,22 @@
     <section style="background:var(--surface);padding:clamp(56px,7vw,110px) clamp(20px,5vw,64px)">
       <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(28px,5vw,72px);align-items:center">
         <div data-reveal>
-          <div style="font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--red-bright);font-weight:600;margin-bottom:16px">Karnataka Oota · Katte Culture · Music · 100% Vegetarian</div>
-          <h2 style="margin:0 0 22px;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(30px,4.2vw,52px);line-height:1.06;letter-spacing:-.015em;color:var(--text-strong);text-wrap:pretty">Where Karnataka feels like home.</h2>
-          <p style="margin:0 0 18px;font-size:16px;line-height:1.75;color:var(--text);max-width:56ch;text-wrap:pretty">A premium South Indian dining experience where authentic food, Katte culture, creativity and music come together.</p>
-          <p style="margin:0 0 26px;font-size:16px;line-height:1.75;color:var(--text-2);max-width:56ch;text-wrap:pretty">From traditional Karnataka Oota, breakfast and filter coffee to our free Open Mic and Jamming sessions, Aralikatte is a place where families, friends, children and artists come together — eat, sing, connect and celebrate like a festival.</p>
-          <p style="margin:0 0 30px;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(17px,2vw,21px);line-height:1.5;color:var(--text-strong)">Come for the Oota.<br>Stay for the Katte.<br>Leave with a memory.</p>
+          <div style="font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--red-bright);font-weight:600;margin-bottom:16px">South Indian · Pure Vegetarian</div>
+          <h2 style="margin:0 0 22px;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(30px,4.2vw,52px);line-height:1.06;letter-spacing:-.015em;color:var(--text-strong);text-wrap:pretty">South Indian comfort, served fresh.</h2>
+          <p style="margin:0 0 30px;font-size:16px;line-height:1.75;color:var(--text);max-width:56ch;text-wrap:pretty">Tiffins, dose and filter coffee on 80 Feet Road, Subramanyapura. Open from six in the morning until one after midnight, every day of the week.</p>
           <div style="display:flex;flex-wrap:wrap;gap:12px">
             <button onClick="{{ goMenu }}" style="padding:15px 28px;border-radius:999px;background:var(--red);color:#fff;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:background .25s,transform .25s" style-hover="background:var(--red-hover);transform:translateY(-1px)">Explore Menu</button>
-            <button onClick="{{ goStory }}" style="padding:15px 28px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,.32);color:var(--text-strong);font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:rgba(255,255,255,.08)">Discover Aralikatte</button>
+            <a href="https://maps.app.goo.gl/4aAoSGyCKxMjMUbf7" target="_blank" rel="noopener" style="padding:15px 28px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,.32);color:var(--text-strong);font-size:15px;font-weight:600;transition:background .25s" style-hover="background:rgba(255,255,255,.08);color:var(--text-strong)">Get Directions</a>
           </div>
         </div>
         <div data-reveal style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px">
-          <div style="height:clamp(280px,34vw,420px);grid-row:span 2"><image-slot id="story-main" shape="rounded" radius="20" src="./assets/aralikatte-story-main.png" placeholder="aralikatte-about.jpg — cafe or counter"></image-slot></div>
+          <div style="height:clamp(280px,34vw,420px);grid-row:span 2;position:relative;overflow:hidden;border-radius:20px">
+            <div data-reveal data-reveal-img style="position:absolute;inset:0">
+              <div data-parallax data-parallax-speed="0.08" data-parallax-max="22" style="position:absolute;inset:-48px">
+                <image-slot id="story-main" shape="rounded" radius="20" src="./assets/aralikatte-story-main.png" placeholder="aralikatte-about.jpg — cafe or counter"></image-slot>
+              </div>
+            </div>
+          </div>
           <div style="height:clamp(133px,16vw,203px)"><image-slot id="story-detail" shape="rounded" radius="20" src="./assets/aralikatte-story-detail.png" placeholder="aralikatte-prep.jpg — kitchen"></image-slot></div>
           <div style="height:clamp(133px,16vw,203px);border-radius:20px;background:var(--red);color:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between">
             <span style="font-size:10px;letter-spacing:.22em;text-transform:uppercase;opacity:.7;font-weight:600">Open daily</span>
@@ -348,13 +354,13 @@
           </div>
           <a href="https://www.instagram.com/aralikattecafe/" target="_blank" rel="noopener" style="padding:15px 28px;border-radius:999px;border:1px solid rgba(255,255,255,.32);color:var(--text-strong);font-size:15px;font-weight:600;transition:background .25s" style-hover="background:rgba(255,255,255,.08);color:var(--text-strong)">Follow on Instagram</a>
         </div>
-        <div data-reveal style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(45%,150px),1fr));gap:10px">
-          <div style="aspect-ratio:1"><image-slot id="ig-01" shape="rounded" radius="14" src="./assets/aralikatte-ig-01.png" placeholder="instagram-01"></image-slot></div>
-          <div style="aspect-ratio:1"><image-slot id="ig-02" shape="rounded" radius="14" src="./assets/aralikatte-ig-02.png" placeholder="instagram-02"></image-slot></div>
-          <div style="aspect-ratio:1"><image-slot id="ig-03" shape="rounded" radius="14" src="./assets/aralikatte-ig-03.png" placeholder="instagram-03"></image-slot></div>
-          <div style="aspect-ratio:1"><image-slot id="ig-04" shape="rounded" radius="14" src="./assets/aralikatte-ig-04.png" placeholder="instagram-04"></image-slot></div>
-          <div style="aspect-ratio:1"><image-slot id="ig-05" shape="rounded" radius="14" src="./assets/aralikatte-ig-05.png" placeholder="instagram-05"></image-slot></div>
-          <div style="aspect-ratio:1"><image-slot id="ig-06" shape="rounded" radius="14" src="./assets/aralikatte-ig-06.png" placeholder="instagram-06"></image-slot></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(45%,150px),1fr));gap:10px">
+          <div data-reveal data-reveal-img style="aspect-ratio:1"><image-slot id="ig-01" shape="rounded" radius="14" src="./assets/aralikatte-ig-01.png" placeholder="instagram-01"></image-slot></div>
+          <div data-reveal data-reveal-img style="aspect-ratio:1"><image-slot id="ig-02" shape="rounded" radius="14" src="./assets/aralikatte-ig-02.png" placeholder="instagram-02"></image-slot></div>
+          <div data-reveal data-reveal-img style="aspect-ratio:1"><image-slot id="ig-03" shape="rounded" radius="14" src="./assets/aralikatte-ig-03.png" placeholder="instagram-03"></image-slot></div>
+          <div data-reveal data-reveal-img style="aspect-ratio:1"><image-slot id="ig-04" shape="rounded" radius="14" src="./assets/aralikatte-ig-04.png" placeholder="instagram-04"></image-slot></div>
+          <div data-reveal data-reveal-img style="aspect-ratio:1"><image-slot id="ig-05" shape="rounded" radius="14" src="./assets/aralikatte-ig-05.png" placeholder="instagram-05"></image-slot></div>
+          <div data-reveal data-reveal-img style="aspect-ratio:1"><image-slot id="ig-06" shape="rounded" radius="14" src="./assets/aralikatte-ig-06.png" placeholder="instagram-06"></image-slot></div>
         </div>
       </div>
     </section>
@@ -494,8 +500,12 @@
     </section>
 
     <section style="padding:0 clamp(20px,5vw,64px)">
-      <div style="max-width:1240px;margin:0 auto;aspect-ratio:16/9">
-        <image-slot id="story-hero" shape="rounded" radius="26" src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWndtazlXhXrCGXoOWL_9lSM8LYXd5a4eGbHF87o-Ve39KJEfoucAbbVKL-2nvh02DvisjN2CQf3qV5Jx713AIdQtS0d2a3uIqgYaBm66LAaifBCDIzbm-vvzfV71l5bYfEIPT2_aEdM8Br5=w1600-h1200-k-no" placeholder="aralikatte-about.jpg — the cafe"></image-slot>
+      <div style="max-width:1240px;margin:0 auto;aspect-ratio:16/9;position:relative;overflow:hidden;border-radius:26px">
+        <div data-reveal data-reveal-img style="position:absolute;inset:0">
+          <div data-parallax data-parallax-speed="0.1" data-parallax-max="30" style="position:absolute;inset:-48px">
+            <image-slot id="story-hero" shape="rounded" radius="26" src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWndtazlXhXrCGXoOWL_9lSM8LYXd5a4eGbHF87o-Ve39KJEfoucAbbVKL-2nvh02DvisjN2CQf3qV5Jx713AIdQtS0d2a3uIqgYaBm66LAaifBCDIzbm-vvzfV71l5bYfEIPT2_aEdM8Br5=w1600-h1200-k-no" placeholder="aralikatte-about.jpg — the cafe"></image-slot>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -538,29 +548,36 @@
     <!-- ====================== FOUNDER'S VISION ======================
          The vision copy lives in the VISION constant in the logic block at
          the foot of this file — paragraphs, tagline and attribution — so it
-         can be updated without touching this markup.
+         can be updated without touching this markup. Composition: a short
+         editorial statement on the left, the vision paragraphs on the
+         right, attribution as a byline row beneath both — an article
+         masthead, not a text box.
     -->
-    <section id="founders-vision" style="padding:0 clamp(20px,5vw,64px) clamp(48px,6vw,96px)">
-      <div data-reveal style="position:relative;max-width:1240px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:clamp(36px,5vw,72px) clamp(24px,5vw,64px);overflow:hidden">
+    <section id="founders-vision" style="padding:0 clamp(20px,5vw,64px) clamp(64px,8vw,120px)">
+      <div data-reveal style="position:relative;max-width:1180px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:clamp(40px,6vw,80px) clamp(28px,6vw,72px);overflow:hidden">
         <span aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)"></span>
-        <div style="max-width:62ch;margin:0 auto">
-          <div style="text-align:center;font-size:11.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--red-bright);font-weight:600;margin-bottom:28px">Founder's Vision</div>
 
-          <sc-for list="{{ visionParagraphs }}" as="p" hint-placeholder-count="5">
-            <p style="margin:0 0 18px;font-size:clamp(15.5px,1.7vw,17px);line-height:1.75;color:var(--text);text-wrap:pretty">{{ p }}</p>
-          </sc-for>
-
-          <div style="margin:34px 0 0;text-align:center;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(20px,2.6vw,28px);line-height:1.5;letter-spacing:-.01em;color:var(--text-strong)">
-            <sc-for list="{{ visionTagline }}" as="line" hint-placeholder-count="4">
-              <span style="display:block">{{ line }}</span>
-            </sc-for>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(36px,6vw,80px);align-items:center">
+          <div>
+            <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--red-bright);font-weight:600;margin-bottom:24px">Founder's Vision</div>
+            <div style="font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(26px,3.4vw,42px);line-height:1.28;letter-spacing:-.01em;color:var(--text-strong)">
+              <sc-for list="{{ visionTagline }}" as="line" hint-placeholder-count="4">
+                <span style="display:block">{{ line }}</span>
+              </sc-for>
+            </div>
+            <span aria-hidden="true" style="display:block;width:44px;height:2px;background:var(--red);margin-top:26px"></span>
           </div>
 
-          <footer style="margin-top:34px;display:flex;flex-direction:column;align-items:center;gap:7px;text-align:center">
-            <span style="width:34px;height:2px;background:var(--red);margin-bottom:9px"></span>
-            <cite style="font-style:normal;font-size:16px;font-weight:600;color:var(--text)">{{ visionFounders }}</cite>
-            <span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);font-weight:600">{{ visionRole }}</span>
-          </footer>
+          <div style="display:flex;flex-direction:column;gap:16px;padding-left:clamp(0px,4vw,8px)">
+            <sc-for list="{{ visionParagraphs }}" as="p" hint-placeholder-count="5">
+              <p style="margin:0;font-size:clamp(14.5px,1.5vw,16px);line-height:1.8;color:var(--text-2);text-wrap:pretty">{{ p }}</p>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin-top:clamp(36px,5vw,56px);padding-top:clamp(22px,3vw,30px);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 20px">
+          <cite style="font-style:normal;font-size:16px;font-weight:600;color:var(--text-strong)">{{ visionFounders }}</cite>
+          <span style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);font-weight:600">{{ visionRole }}</span>
         </div>
       </div>
     </section>
@@ -596,7 +613,7 @@
     <section style="padding:0 clamp(20px,5vw,64px) clamp(56px,7vw,104px)">
       <div style="max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px">
         <sc-for list="{{ gallery }}" as="g" hint-placeholder-count="9">
-          <figure style="margin:0;position:relative;border-radius:18px;overflow:hidden;background:var(--surface-2);height:{{ g.h }}">
+          <figure data-reveal data-reveal-img style="margin:0;position:relative;border-radius:18px;overflow:hidden;background:var(--surface-2);height:{{ g.h }}">
             <image-slot id="gal-{{ g.id }}" shape="rect" src="{{ g.src }}" placeholder="{{ g.file }}"></image-slot>
             <figcaption style="position:absolute;top:12px;left:12px;padding:5px 11px;border-radius:999px;background:rgba(0,0,0,.66);color:var(--text);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;pointer-events:none">{{ g.cat }}</figcaption>
           </figure>
@@ -679,7 +696,7 @@
   <sc-if value="{{ isCatering }}" hint-placeholder-val="{{ false }}">
   <main>
     <section style="position:relative;min-height:min(72vh,620px);display:flex;align-items:flex-end;overflow:hidden">
-      <div style="position:absolute;inset:0"><image-slot id="catering-hero" shape="rect" src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnMNzy09lZgpqjHlInKlKXTXPrHhN8qXNi4gf_SLgmv54uu356IKKBdtHUC_71erCQ-vFu4aWWzVLaVxKYid_Vr7rCwZZFS8uKLKIVCO-O7EzhRPdaR1kT1DG0-n3BHLIUMHmeoituCdt8=w1085-h1450-k-no" placeholder="aralikatte-catering-hero.jpg"></image-slot></div>
+      <div data-parallax data-parallax-speed="0.1" data-parallax-max="34" style="position:absolute;inset:-48px"><image-slot id="catering-hero" shape="rect" src="https://lh3.googleusercontent.com/gps-cs-s/AHRPTWnMNzy09lZgpqjHlInKlKXTXPrHhN8qXNi4gf_SLgmv54uu356IKKBdtHUC_71erCQ-vFu4aWWzVLaVxKYid_Vr7rCwZZFS8uKLKIVCO-O7EzhRPdaR1kT1DG0-n3BHLIUMHmeoituCdt8=w1085-h1450-k-no" placeholder="aralikatte-catering-hero.jpg"></image-slot></div>
       <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,5,6,.55) 0%,rgba(6,5,6,.24) 36%,rgba(13,13,15,.97) 100%);pointer-events:none"></div>
       <div style="position:relative;width:100%;max-width:1240px;margin:0 auto;padding:clamp(44px,7vw,88px) clamp(20px,5vw,64px);pointer-events:none">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
@@ -742,16 +759,16 @@
           <p style="margin:0;max-width:40ch;font-size:14.5px;line-height:1.7;color:var(--text-2)">Representative dishes from the cafe. The final selection is planned with you.</p>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:clamp(12px,2vw,20px)">
-          <div style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+          <div data-reveal style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
             <div style="padding:28px 26px"><div style="width:34px;height:2px;background:var(--red);margin-bottom:18px"></div><h3 style="margin:0 0 8px;font-family:'DM Serif Display',serif;font-weight:400;font-size:23px;color:var(--text-strong)">Tiffin Spread</h3><p style="margin:0;font-size:14px;line-height:1.6;color:var(--text-2)">Idli, vada and rava idli with chutney and sambar.</p></div>
           </div>
-          <div style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+          <div data-reveal style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
             <div style="padding:28px 26px"><div style="width:34px;height:2px;background:var(--red);margin-bottom:18px"></div><h3 style="margin:0 0 8px;font-family:'DM Serif Display',serif;font-weight:400;font-size:23px;color:var(--text-strong)">Dose Counter</h3><p style="margin:0;font-size:14px;line-height:1.6;color:var(--text-2)">Dose, onion dose and masala dose, where the venue allows.</p></div>
           </div>
-          <div style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+          <div data-reveal style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
             <div style="padding:28px 26px"><div style="width:34px;height:2px;background:var(--red);margin-bottom:18px"></div><h3 style="margin:0 0 8px;font-family:'DM Serif Display',serif;font-weight:400;font-size:23px;color:var(--text-strong)">Rice &amp; Pongal</h3><p style="margin:0;font-size:14px;line-height:1.6;color:var(--text-2)">Puliogre, pongal and traditional accompaniments.</p></div>
           </div>
-          <div style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
+          <div data-reveal style="background:var(--surface-2);border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.1)">
             <div style="padding:28px 26px"><div style="width:34px;height:2px;background:var(--red);margin-bottom:18px"></div><h3 style="margin:0 0 8px;font-family:'DM Serif Display',serif;font-weight:400;font-size:23px;color:var(--text-strong)">Filter Coffee</h3><p style="margin:0;font-size:14px;line-height:1.6;color:var(--text-2)">Decoction and hot milk, served through the event.</p></div>
           </div>
         </div>
@@ -1003,23 +1020,48 @@ const VISION = {
 };
 
 class Component extends DCLogic {
-  state = { page: 'home', navOpen: false, w: 1440, cat: 'all', q: '', gcat: 'All', sent: false, catSent: false };
+  state = { page: 'home', navOpen: false, w: 1440, scrolled: false, cat: 'all', q: '', gcat: 'All', sent: false, catSent: false };
 
   componentDidMount() {
     this._onResize = () => this.setState({ w: window.innerWidth });
     this._onResize();
     window.addEventListener('resize', this._onResize);
+
+    // Sticky-header lift: a tiny, throttled scroll flag rather than a
+    // per-frame listener — only flips state (and re-renders) when the
+    // boolean actually changes.
+    this._onScroll = () => {
+      const now = window.scrollY > 8;
+      if (now !== this.state.scrolled) this.setState({ scrolled: now });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    this._onScroll();
+
     this.reveal();
+    this.initParallax();
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this._onResize);
+    window.removeEventListener('scroll', this._onScroll);
     if (this._io) this._io.disconnect();
+    if (this._parallaxCleanup) this._parallaxCleanup();
   }
   componentDidUpdate() { this.reveal(); }
 
+  // Fade-up / scale-in entrance for anything marked [data-reveal]. Elements
+  // that share a parent (card grids, image tiles, gallery figures) cascade
+  // in with a short stagger automatically — no extra markup needed per
+  // group, it falls out of how many matched siblings share a parent.
+  // [data-reveal-img] swaps the translateY for a gentle scale-down instead,
+  // for photography rather than text blocks.
   reveal() {
     if (typeof window === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els = Array.from(document.querySelectorAll('[data-reveal]:not([data-revealed])'));
+    if (reduced) {
+      els.forEach((el) => el.setAttribute('data-revealed', '1'));
+      return;
+    }
     if (!this._io) {
       this._io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
@@ -1031,13 +1073,55 @@ class Component extends DCLogic {
         });
       }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
     }
-    document.querySelectorAll('[data-reveal]:not([data-revealed])').forEach((el) => {
-      el.setAttribute('data-revealed', '1');
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(16px)';
-      el.style.transition = 'opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)';
-      this._io.observe(el);
+    const groups = new Map();
+    els.forEach((el) => {
+      const p = el.parentElement;
+      if (!groups.has(p)) groups.set(p, []);
+      groups.get(p).push(el);
     });
+    groups.forEach((siblings) => {
+      const stagger = siblings.length > 1;
+      siblings.forEach((el, i) => {
+        const delay = stagger ? Math.min(i * 70, 420) : 0;
+        el.setAttribute('data-revealed', '1');
+        el.style.opacity = '0';
+        el.style.transform = el.hasAttribute('data-reveal-img') ? 'scale(1.045)' : 'translateY(16px)';
+        el.style.transition = 'opacity .7s cubic-bezier(.22,.61,.36,1) ' + delay + 'ms, transform .8s cubic-bezier(.22,.61,.36,1) ' + delay + 'ms';
+        this._io.observe(el);
+      });
+    });
+  }
+
+  // Subtle scroll parallax on [data-parallax] wrappers (always an oversized
+  // absolutely-positioned layer inside an overflow:hidden box, so the shift
+  // never exposes an edge). One shared, rAF-throttled scroll listener drives
+  // every instance; each is skipped unless currently near the viewport.
+  initParallax() {
+    if (typeof window === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let raf = null;
+    const update = () => {
+      raf = null;
+      const vh = window.innerHeight;
+      document.querySelectorAll('[data-parallax]').forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom < -200 || rect.top > vh + 200) return;
+        const speed = parseFloat(el.getAttribute('data-parallax-speed') || '0.12');
+        const max = parseFloat(el.getAttribute('data-parallax-max') || '40');
+        const center = rect.top + rect.height / 2 - vh / 2;
+        const shift = Math.max(-max, Math.min(max, center * -speed));
+        el.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0)';
+      });
+    };
+    const onScroll = () => { if (raf == null) raf = requestAnimationFrame(update); };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    this._parallaxCleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf != null) cancelAnimationFrame(raf);
+    };
+    update();
   }
 
   go(page) {
@@ -1088,6 +1172,8 @@ class Component extends DCLogic {
       wide: wide,
       narrow: !wide,
       navOpen: s.navOpen,
+      headerShadow: s.scrolled ? '0 12px 30px -16px rgba(0,0,0,.7)' : 'none',
+      headerBorder: s.scrolled ? 'rgba(255,255,255,.16)' : 'rgba(255,255,255,.12)',
       showBar: this.props.showAnnouncementBar ?? true,
       showStickyBar: (this.props.showStickyMobileBar ?? true) && s.w < 760,
       isHome: s.page === 'home',
