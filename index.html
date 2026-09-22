@@ -187,7 +187,18 @@
         <p data-reveal style="margin:22px 0 0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(16px,1.9vw,20px);line-height:1.4;color:var(--red-bright)">Come for the Oota.<br>Stay for the Katte.<br>Leave with a memory.</p>
         <div data-reveal style="display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;pointer-events:auto">
           <button onClick="{{ goMenu }}" style="padding:17px 30px;border-radius:999px;background:var(--red);color:#fff;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:transform .25s,background .25s" style-hover="background:var(--red-hover);transform:translateY(-2px)">Explore Menu</button>
-          <button onClick="{{ goStory }}" style="padding:17px 30px;border-radius:999px;border:1px solid var(--line-3);background:transparent;color:var(--text-strong);font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:rgba(255,255,255,.1);color:var(--text-strong)">Discover Aralikatte</button>
+          <button onClick="{{ goStory }}" style="display:inline-flex;align-items:center;gap:10px;padding:15px 30px 15px 20px;border-radius:999px;border:1px solid var(--line-3);background:transparent;color:var(--text-strong);font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:rgba(255,255,255,.1);color:var(--text-strong)">
+            <span aria-hidden="true" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--red-bright);display:flex;align-items:center;justify-content:center;flex:none">
+              <span style="width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent var(--red-bright);margin-left:2px"></span>
+            </span>
+            Discover Aralikatte
+          </button>
+        </div>
+        <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:26px;pointer-events:auto">
+          <span style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-2);font-weight:600">Jump to</span>
+          <sc-for list="{{ heroCats }}" as="hc" hint-placeholder-count="6">
+            <button onClick="{{ hc.select }}" style="padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.06);color:var(--text);font-size:12.5px;font-weight:600;cursor:pointer;transition:background .2s,border-color .2s" style-hover="background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.5)">{{ hc.name }}</button>
+          </sc-for>
         </div>
       </div>
     </section>
@@ -436,18 +447,35 @@
     <section style="padding:clamp(32px,4vw,56px) clamp(20px,5vw,64px) clamp(56px,7vw,104px)">
       <div style="max-width:1000px;margin:0 auto">
         <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:28px">
-          <p style="margin:0;font-size:14.5px;line-height:1.7;color:var(--text-2);max-width:46ch">Items listed below are drawn from our current public menu. Prices and additional sections are being confirmed with the cafe.</p>
+          <p style="margin:0;font-size:14.5px;line-height:1.7;color:var(--text-2);max-width:46ch">Choose a category to see what's on it. Prices and additional sections are being confirmed with the cafe.</p>
           <label style="display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:var(--surface-2);min-width:min(100%,260px)">
             <span style="width:13px;height:13px;border:1.5px solid var(--text-3);border-radius:50%;flex:none"></span>
             <input type="search" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search the menu" aria-label="Search the menu" style="border:none;outline:none;background:none;font-size:14.5px;color:var(--text);width:100%">
           </label>
         </div>
 
-        <div role="tablist" aria-label="Menu categories" style="display:flex;flex-wrap:wrap;gap:9px;padding-bottom:26px;border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:clamp(30px,4vw,48px)">
-          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="5">
-            <button onClick="{{ tab.select }}" role="tab" aria-selected="{{ tab.active }}" style="padding:12px 22px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:{{ tab.bg }};color:{{ tab.fg }};font-size:14px;font-weight:600;cursor:pointer;transition:background .22s,color .22s">{{ tab.name }}</button>
+        <!-- CATEGORY NAVIGATION — the single source of truth (MENU) rendered
+             as premium cards, always at the TOP of the page. Nothing is
+             selected by default, so items never appear before a category
+             does; picking a card (or arriving via a Hero deep link) reveals
+             that category's items below. Same cards, same data, as the
+             Hero's category links. -->
+        <div id="menu-categories" role="tablist" aria-label="Menu categories" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;padding-bottom:clamp(30px,4vw,40px);border-bottom:1px solid rgba(255,255,255,.14);margin-bottom:clamp(30px,4vw,48px);scroll-margin-top:96px">
+          <sc-for list="{{ catCards }}" as="c" hint-placeholder-count="6">
+            <button onClick="{{ c.select }}" role="tab" aria-selected="{{ c.active }}" style="text-align:left;cursor:pointer;padding:20px 18px;border-radius:16px;border:1px solid {{ c.border }};background:{{ c.bg }};display:flex;flex-direction:column;gap:8px;transition:transform .22s,border-color .22s,background .22s" style-hover="transform:translateY(-3px)">
+              <span style="font-family:'DM Serif Display',serif;font-weight:400;font-size:18.5px;line-height:1.2;color:{{ c.fg }}">{{ c.name }}</span>
+              <span style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:{{ c.sub }}">{{ c.tag }}</span>
+            </button>
           </sc-for>
         </div>
+
+        <sc-if value="{{ showPrompt }}" hint-placeholder-val="{{ true }}">
+          <p style="margin:0 0 40px;font-size:16px;color:var(--text-2)">Select a category above to see the dishes on it.</p>
+        </sc-if>
+
+        <sc-if value="{{ hasCategory }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ clearCategory }}" style="background:none;border:none;padding:0;margin-bottom:24px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--red-bright);display:flex;align-items:center;gap:6px">← All Categories</button>
+        </sc-if>
 
         <sc-for list="{{ menu }}" as="cat" hint-placeholder-count="2">
           <div style="margin-bottom:clamp(38px,5vw,64px)">
@@ -959,12 +987,14 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;showAnnouncementBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;showStickyMobileBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;priceDisplay&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Price — coming soon&quot;,&quot;Hide prices&quot;],&quot;default&quot;:&quot;Price — coming soon&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Menu&quot;}}">
 // ---------------------------------------------------------------------------
-// MENU — five category templates, per the client's brief. Each template is a
-// reusable container ({ id, name, note, items[] }); the tabs, the section
-// list and the empty-category state all read from this one array, so adding
-// a template or an item never requires touching the markup below.
+// MENU — six category templates, per the client's brief. Each template is a
+// reusable container ({ id, name, note, items[] }); the Hero's category
+// links, the Menu page's category cards, the section list and the
+// empty-category state all read from this ONE array — the single source of
+// truth for categories everywhere on the site.
 // Categories with no verified items yet (`items: []`) render a "coming soon"
-// row instead of disappearing, so the template stays visible while empty.
+// row instead of disappearing, so the template stays visible while empty and
+// is ready for the client's full menu.
 // ---------------------------------------------------------------------------
 const MENU = [
   { id: 'breakfast', name: 'Breakfast / Tiffin', note: 'From 6:00 AM', items: [
@@ -976,8 +1006,9 @@ const MENU = [
     { n: 'Onion Dose', d: 'Dose layered with finely chopped onion.' },
     { n: 'Masala Dose', d: 'Dose folded over spiced potato palya.' }
   ]},
-  { id: 'juice-icecream', name: 'Juice / Ice Creams', note: '', items: [] },
-  { id: 'meals', name: 'Meals', note: 'All day', items: [
+  { id: 'juices-milkshakes', name: 'Juices / Milkshakes', note: '', items: [] },
+  { id: 'ice-creams', name: 'Ice Creams', note: '', items: [] },
+  { id: 'meals', name: 'Lunch / Meals', note: 'All day', items: [
     { n: 'Puliogre', d: 'Tamarind rice mixed with a dark, tangy spice paste.' }
   ]},
   { id: 'sweets', name: 'Sweets', note: '', items: [] },
@@ -986,6 +1017,23 @@ const MENU = [
     { n: 'Tea', d: 'Strong, milky, served hot.' }
   ]}
 ];
+
+// ---------------------------------------------------------------------------
+// ROUTING — query-string only (path stays "/"), so every deep link works on
+// a static host with no server rewrites: ?page=menu&category=breakfast.
+// Reused for the initial state, popstate (back/forward) and for pushing new
+// entries, so there is one reader and one writer for the whole app.
+// ---------------------------------------------------------------------------
+const ROUTE_PAGES = ['home', 'menu', 'story', 'gallery', 'catering', 'contact'];
+function readRouteFromLocation() {
+  if (typeof window === 'undefined') return { page: 'home', cat: null };
+  const params = new URLSearchParams(window.location.search);
+  const pageParam = params.get('page');
+  const catParam = params.get('category');
+  const validCat = MENU.some((c) => c.id === catParam);
+  const page = ROUTE_PAGES.includes(pageParam) ? pageParam : (validCat ? 'menu' : 'home');
+  return { page: page, cat: validCat ? catParam : null };
+}
 
 const GAL_SRC = './assets/aralikatte-gallery-';
 const GALLERY = [
@@ -1009,23 +1057,36 @@ const GALLERY = [
 const VISION = {
   paragraphs: [
     'Aralikatte is a premium South Indian QSR built around food, culture, music and togetherness.',
-    'Founded by Navaneeth Gowda & Kavitha Reddy, Aralikatte brings authentic Karnataka and South Indian food into a modern QSR experience inspired by the traditional Katte.',
+    'Founded by Navaneeth Gowda & Kawitha Reddy, Aralikatte brings authentic Karnataka and South Indian food into a modern QSR experience inspired by the traditional Katte.',
     'Our vision is to celebrate South Indian culture through traditional architecture, authentic flavours, warm hospitality, creativity and music — creating a place where everyone feels at home.',
     'From traditional breakfast, Karnataka Oota and filter coffee to our Creative Corner, free Open Mic and Jamming sessions, Aralikatte brings people together to eat, connect and celebrate.',
     'We aim to build Aralikatte into a leading South Indian QSR brand from India, taking the taste and culture of South India to every corner of the country and beyond.'
   ],
   tagline: ['Authentic Food.', 'Rich Culture.', 'Good Music.', 'One Aralikatte.'],
-  founders: 'Navaneeth Gowda & Kavitha Reddy',
+  founders: 'Navaneeth Gowda & Kawitha Reddy',
   role: 'Founders, Aralikatte'
 };
 
 class Component extends DCLogic {
-  state = { page: 'home', navOpen: false, w: 1440, scrolled: false, cat: 'all', q: '', gcat: 'All', sent: false, catSent: false };
+  state = (() => {
+    const r = readRouteFromLocation();
+    return { page: r.page, navOpen: false, w: 1440, scrolled: false, cat: r.cat, q: '', gcat: 'All', sent: false, catSent: false };
+  })();
 
   componentDidMount() {
     this._onResize = () => this.setState({ w: window.innerWidth });
     this._onResize();
     window.addEventListener('resize', this._onResize);
+
+    // Deep-linking: ?page=menu&category=breakfast survives refresh (read into
+    // initial state above) and back/forward (re-read here on every
+    // popstate) — one reader (readRouteFromLocation), one writer (pushRoute).
+    this._onPopState = () => {
+      const r = readRouteFromLocation();
+      this.setState({ page: r.page, cat: r.cat, navOpen: false });
+    };
+    window.addEventListener('popstate', this._onPopState);
+    if (this.state.page === 'menu' && this.state.cat) this.scrollToMenuTop();
 
     // Sticky-header lift: a tiny, throttled scroll flag rather than a
     // per-frame listener — only flips state (and re-renders) when the
@@ -1043,6 +1104,7 @@ class Component extends DCLogic {
   componentWillUnmount() {
     window.removeEventListener('resize', this._onResize);
     window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('popstate', this._onPopState);
     if (this._io) this._io.disconnect();
     if (this._parallaxCleanup) this._parallaxCleanup();
   }
@@ -1125,8 +1187,55 @@ class Component extends DCLogic {
   }
 
   go(page) {
-    this.setState({ page: page, navOpen: false });
+    const patch = { page: page, navOpen: false };
+    if (page === 'menu') { patch.cat = null; patch.q = ''; }
+    this.setState(patch);
+    this.pushRoute(page, null);
     if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+
+  // Hero → Menu deep link: jump straight to the Menu page with a category
+  // already selected, then scroll past the hero banner so the chosen
+  // category's cards/items are the first thing in view.
+  goMenuCategory(id) {
+    this.setState({ page: 'menu', cat: id, navOpen: false, q: '' });
+    this.pushRoute('menu', id);
+    this.scrollToMenuTop();
+  }
+
+  // In-page category switch (already on the Menu page) — no page-level
+  // scroll reset, just make sure the category rail stays in view.
+  selectCategory(id) {
+    this.setState({ cat: id, q: '' });
+    this.pushRoute('menu', id);
+    this.scrollToMenuTop();
+  }
+
+  clearCategory() {
+    this.setState({ cat: null, q: '' });
+    this.pushRoute('menu', null);
+  }
+
+  scrollToMenuTop() {
+    if (typeof window === 'undefined') return;
+    requestAnimationFrame(() => {
+      const el = document.getElementById('menu-categories');
+      if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
+      else window.scrollTo({ top: 0, behavior: 'auto' });
+    });
+  }
+
+  // Single writer for the URL — query-string only (path stays "/") so deep
+  // links work on a static host with no server-side rewrites needed.
+  pushRoute(page, catId) {
+    if (typeof window === 'undefined' || !window.history || !window.history.pushState) return;
+    const params = new URLSearchParams();
+    if (page && page !== 'home') params.set('page', page);
+    if (catId) params.set('category', catId);
+    const qs = params.toString();
+    const path = window.location.pathname + (qs ? '?' + qs : '');
+    if (path === window.location.pathname + window.location.search) return;
+    window.history.pushState({ page: page, category: catId || null }, '', path);
   }
 
   renderVals() {
@@ -1134,17 +1243,29 @@ class Component extends DCLogic {
     const wide = s.w >= 1120;
     const q = s.q.trim().toLowerCase();
 
-    const cats = [{ id: 'all', name: 'Everything' }].concat(MENU.map((c) => ({ id: c.id, name: c.name })));
-    const tabs = cats.map((c) => ({
-      name: c.name,
-      active: s.cat === c.id,
-      bg: s.cat === c.id ? 'var(--red)' : 'var(--surface-2)',
-      fg: s.cat === c.id ? '#fff' : 'var(--text-2)',
-      select: () => this.setState({ cat: c.id })
-    }));
+    // Menu categories come first: a card per MENU template (the single
+    // source of truth also used by the Hero). Nothing is selected by
+    // default, so the Menu page opens on the category grid, not a flat
+    // item list — matching the client's requested structure. Typing a
+    // search query is the one case that searches across every category at
+    // once, since that's an explicit user action rather than the default view.
+    const catCards = MENU.map((c) => {
+      const active = s.cat === c.id;
+      return {
+        id: c.id,
+        name: c.name,
+        tag: c.items.length ? (c.items.length + (c.items.length === 1 ? ' item' : ' items')) : 'Coming soon',
+        active: active,
+        bg: active ? 'var(--red)' : 'var(--surface-2)',
+        fg: active ? '#fff' : 'var(--text-strong)',
+        sub: active ? 'rgba(255,255,255,.85)' : 'var(--text-3)',
+        border: active ? 'var(--red)' : 'rgba(255,255,255,.14)',
+        select: () => this.selectCategory(c.id)
+      };
+    });
 
-    const menu = MENU
-      .filter((c) => s.cat === 'all' || c.id === s.cat)
+    const activeCategories = s.cat ? MENU.filter((c) => c.id === s.cat) : (q ? MENU : []);
+    const menu = activeCategories
       .map((c) => {
         const comingSoon = c.items.length === 0 && !q;
         return {
@@ -1155,6 +1276,8 @@ class Component extends DCLogic {
         };
       })
       .filter((c) => c.comingSoon || c.items.length > 0);
+
+    const showPrompt = !s.cat && !q;
 
     const gnames = ['All', 'Food', 'Cafe', 'Coffee', 'People'];
     const galTabs = gnames.map((n) => ({
@@ -1196,9 +1319,13 @@ class Component extends DCLogic {
       goGallery: () => this.go('gallery'),
       goContact: () => this.go('contact'),
       toggleNav: () => this.setState((st) => ({ navOpen: !st.navOpen })),
-      tabs: tabs,
+      heroCats: MENU.map((c) => ({ name: c.name, select: () => this.goMenuCategory(c.id) })),
+      catCards: catCards,
+      showPrompt: showPrompt,
+      hasCategory: !!s.cat,
+      clearCategory: () => this.clearCategory(),
       menu: menu,
-      empty: menu.length === 0,
+      empty: !showPrompt && menu.length === 0,
       query: s.q,
       onQuery: (e) => this.setState({ q: e.target.value }),
       priceLabel: (this.props.priceDisplay ?? 'Price — coming soon') === 'Hide prices' ? '' : 'Price — coming soon',
