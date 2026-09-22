@@ -77,6 +77,22 @@
      it keeps its placeholder chrome at full strength. */
   image-slot[src]{color:rgba(255,255,255,.18)}
   @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important;animation-duration:.01ms !important}}
+
+  /* Home "Explore Our Menu" carousel — native horizontal scroll-snap, no
+     library. JS only ever toggles .is-active (nearest card to the track's
+     centre); every visual transition lives here so it can never be fought
+     by an inline style written elsewhere. */
+  .mc-track{scrollbar-width:none}
+  .mc-track::-webkit-scrollbar{display:none}
+  .mc-card{width:100%;display:block;opacity:.6;transform:scale(.93);transition:transform .5s cubic-bezier(.22,.61,.36,1),opacity .5s ease,box-shadow .3s ease}
+  .mc-card.is-active{opacity:1;transform:scale(1)}
+  .mc-card:hover{box-shadow:0 20px 40px -20px rgba(0,0,0,.85)}
+  .mc-card .mc-img-inner{transition:transform .6s ease}
+  .mc-card:hover .mc-img-inner{transform:scale(1.06)}
+  .mc-card .mc-arrow{display:inline-block;transition:transform .3s ease}
+  .mc-card:hover .mc-arrow{transform:translateX(3px)}
+  .mc-arrows{display:none}
+  @media (min-width:760px){.mc-arrows{display:flex}.mc-hint{display:none}}
 </style>
 </helmet>
 <div style="min-height:100vh;background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif">
@@ -222,6 +238,58 @@
           <div style="font-size:15.5px;font-weight:600;color:var(--text-strong)">Instagram</div>
         </a>
       </div>
+    </section>
+
+    <section aria-label="Explore our menu" style="padding:clamp(56px,7vw,110px) 0">
+      <div style="max-width:1240px;margin:0 auto;padding:0 clamp(20px,5vw,64px)">
+        <div data-reveal style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 32px;margin-bottom:clamp(30px,4vw,46px)">
+          <div>
+            <div style="font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--red-bright);font-weight:600;margin-bottom:14px">Explore Our Menu</div>
+            <h2 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(30px,4.4vw,54px);line-height:1.06;letter-spacing:-.015em;color:var(--text-strong)">Something for every craving.</h2>
+          </div>
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+            <p style="margin:0;max-width:36ch;font-size:15px;line-height:1.7;color:var(--text-2);text-wrap:pretty">Six ways into the kitchen — pick one to see what's on it.</p>
+            <div class="mc-arrows" style="gap:8px;flex:none">
+              <button aria-label="Previous category" onClick="{{ mcPrev }}" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.08)">←</button>
+              <button aria-label="Next category" onClick="{{ mcNext }}" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.08)">→</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="menu-carousel" class="mc-track" style="display:flex;gap:clamp(16px,2vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;padding:6px clamp(20px,5vw,64px) 10px">
+        <sc-for list="{{ showcaseCategories }}" as="sc" hint-placeholder-count="6">
+          <div data-reveal style="flex:none;width:min(300px,72vw);scroll-snap-align:center">
+            <button onClick="{{ sc.select }}" aria-label="{{ sc.name }} — view on the menu" class="mc-card" style="text-align:left;cursor:pointer;padding:0;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:var(--surface-2)">
+              <div style="height:min(58vw,340px);overflow:hidden;position:relative">
+                <sc-if value="{{ sc.hasImg }}" hint-placeholder-val="{{ true }}">
+                  <div class="mc-img-inner" style="position:absolute;inset:0">
+                    <image-slot shape="rect" src="{{ sc.img }}" placeholder="{{ sc.name }}"></image-slot>
+                  </div>
+                  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,15,0) 55%,rgba(13,13,15,.6) 100%);pointer-events:none"></div>
+                </sc-if>
+                <sc-if value="{{ !sc.hasImg }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;inset:0;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+                    <span aria-hidden="true" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center">
+                      <span style="width:8px;height:8px;background:var(--red-bright);transform:rotate(45deg)"></span>
+                    </span>
+                    <span style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);text-align:center;padding:0 20px">Photography coming soon</span>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="padding:20px 22px 24px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+                  <h3 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:21px;line-height:1.2;color:var(--text-strong)">{{ sc.name }}</h3>
+                  <span class="mc-arrow" aria-hidden="true" style="flex:none;font-family:'DM Serif Display',serif;font-size:19px;color:var(--red-bright)">→</span>
+                </div>
+                <span style="font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--text-3)">{{ sc.tag }}</span>
+              </div>
+            </button>
+          </div>
+        </sc-for>
+      </div>
+
+      <p class="mc-hint" style="margin:14px 0 0;text-align:center;font-size:12.5px;letter-spacing:.06em;color:var(--text-3)">Swipe for more →</p>
     </section>
 
     <section style="background:var(--surface);padding:clamp(56px,7vw,110px) clamp(20px,5vw,64px)">
@@ -1039,6 +1107,7 @@ class Component extends DCLogic {
 
     this.reveal();
     this.initParallax();
+    this.initCarousel();
   }
   componentWillUnmount() {
     window.removeEventListener('resize', this._onResize);
@@ -1046,8 +1115,9 @@ class Component extends DCLogic {
     window.removeEventListener('popstate', this._onPopState);
     if (this._io) this._io.disconnect();
     if (this._parallaxCleanup) this._parallaxCleanup();
+    if (this._carouselCleanup) this._carouselCleanup();
   }
-  componentDidUpdate() { this.reveal(); }
+  componentDidUpdate() { this.reveal(); this.initCarousel(); }
 
   // Fade-up / scale-in entrance for anything marked [data-reveal]. Elements
   // that share a parent (card grids, image tiles, gallery figures) cascade
@@ -1125,6 +1195,73 @@ class Component extends DCLogic {
     update();
   }
 
+  // "Explore Our Menu" carousel — plain horizontal scroll-snap, so touch
+  // swipe and trackpad scrolling already work for free. This only tracks
+  // which .mc-card sits nearest the track's centre and flips .is-active
+  // (the stylesheet, not inline styles, does the actual scale/dim, keeping
+  // it independent of the :hover zoom defined there too) — purely a visual
+  // read of the current scroll position, never fed back into the arrow
+  // buttons below. Runs from componentDidMount/componentDidUpdate, same as
+  // reveal(); re-binds itself if the track was unmounted (a page switch)
+  // and comes back.
+  initCarousel() {
+    if (typeof window === 'undefined') return;
+    const el = document.getElementById('menu-carousel');
+    if (!el) return;
+    if (el === this._carouselEl) {
+      if (this._carouselUpdate) this._carouselUpdate();
+      return;
+    }
+    if (this._carouselCleanup) this._carouselCleanup();
+    this._carouselEl = el;
+    const update = () => {
+      const cards = Array.from(el.querySelectorAll('.mc-card'));
+      if (!cards.length) return;
+      const mid = el.getBoundingClientRect().left + el.clientWidth / 2;
+      let index = 0;
+      let closestDist = Infinity;
+      cards.forEach((c, i) => {
+        const r = c.getBoundingClientRect();
+        const dist = Math.abs(r.left + r.width / 2 - mid);
+        if (dist < closestDist) {
+          closestDist = dist;
+          index = i;
+        }
+      });
+      cards.forEach((c, i) => c.classList.toggle('is-active', i === index));
+    };
+    let raf = null;
+    const onScroll = () => {
+      if (raf == null) raf = requestAnimationFrame(() => { raf = null; update(); });
+    };
+    el.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    this._carouselUpdate = update;
+    this._carouselCleanup = () => {
+      el.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (raf != null) cancelAnimationFrame(raf);
+      this._carouselEl = null;
+      this._carouselUpdate = null;
+    };
+    update();
+  }
+
+  // Prev/next arrows: nudge by one card + its gap and let CSS scroll-snap
+  // (scroll-snap-type:x mandatory on the track) settle on the nearest valid
+  // card — simpler and more robust across the track's own edges than trying
+  // to compute/target an exact card index by hand.
+  scrollCarousel(dir) {
+    if (typeof document === 'undefined') return;
+    const el = document.getElementById('menu-carousel');
+    if (!el) return;
+    const card = el.querySelector('.mc-card');
+    const gap = parseFloat(getComputedStyle(el).columnGap || getComputedStyle(el).gap || '24') || 24;
+    const step = (card ? card.getBoundingClientRect().width : el.clientWidth * 0.8) + gap;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollBy({ left: dir * step, behavior: reduced ? 'auto' : 'smooth' });
+  }
+
   go(page) {
     const patch = { page: page, navOpen: false };
     if (page === 'menu') { patch.cat = null; patch.q = ''; }
@@ -1188,6 +1325,26 @@ class Component extends DCLogic {
     // item list — matching the client's requested structure. Typing a
     // search query is the one case that searches across every category at
     // once, since that's an explicit user action rather than the default view.
+    // Home page "Explore Our Menu" carousel — same MENU array, so a card
+    // here and its Menu-page category are always the same category. A dish
+    // photo (`img`) is only wired up for the three sections that already
+    // have a verified, caption-free product shot; the rest fall back to a
+    // plain "photography coming soon" card rather than a stand-in photo, so
+    // nothing on the home page misrepresents what's actually on the menu.
+    const SHOWCASE_IMG = {
+      breakfast: './assets/aralikatte-idli.png',
+      meals: './assets/aralikatte-gallery-02.png',
+      beverages: './assets/aralikatte-coffee.png'
+    };
+    const showcaseCategories = MENU.map((c) => ({
+      id: c.id,
+      name: c.name,
+      img: SHOWCASE_IMG[c.id] || '',
+      hasImg: !!SHOWCASE_IMG[c.id],
+      tag: c.items.length ? (c.items.length + (c.items.length === 1 ? ' item' : ' items')) : 'Coming soon',
+      select: () => this.goMenuCategory(c.id)
+    }));
+
     const catCards = MENU.map((c) => {
       const active = s.cat === c.id;
       return {
@@ -1259,6 +1416,9 @@ class Component extends DCLogic {
       goContact: () => this.go('contact'),
       toggleNav: () => this.setState((st) => ({ navOpen: !st.navOpen })),
       heroCats: MENU.map((c) => ({ name: c.name, select: () => this.goMenuCategory(c.id) })),
+      showcaseCategories: showcaseCategories,
+      mcPrev: () => this.scrollCarousel(-1),
+      mcNext: () => this.scrollCarousel(1),
       catCards: catCards,
       showPrompt: showPrompt,
       hasCategory: !!s.cat,
