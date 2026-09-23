@@ -189,7 +189,7 @@
   <main>
     <section style="position:relative;min-height:min(94vh,860px);display:flex;align-items:flex-end;overflow:hidden">
       <div data-parallax data-parallax-speed="0.1" data-parallax-max="34" style="position:absolute;inset:-48px">
-        <image-slot id="hero" shape="rect" fit="cover" src="./assets/aralikatte-hero.jpg" placeholder="aralikatte-hero.jpg — full-bleed breakfast spread"></image-slot>
+        <image-slot id="hero" shape="rect" fit="cover" src="./assets/aralikatte-hero-breakfast.jpg" placeholder="aralikatte-hero-breakfast.jpg — full-bleed breakfast spread"></image-slot>
       </div>
       <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,5,6,.64) 0%,rgba(6,5,6,.26) 32%,rgba(13,13,15,.97) 100%);pointer-events:none"></div>
       <div style="position:relative;width:100%;max-width:1240px;margin:0 auto;padding:clamp(48px,8vw,96px) clamp(20px,5vw,64px);pointer-events:none">
@@ -264,7 +264,7 @@
               <div style="height:min(58vw,340px);overflow:hidden;position:relative">
                 <sc-if value="{{ sc.hasImg }}" hint-placeholder-val="{{ true }}">
                   <div class="mc-img-inner" style="position:absolute;inset:0">
-                    <image-slot shape="rect" src="{{ sc.img }}" placeholder="{{ sc.name }}"></image-slot>
+                    <image-slot id="mc-{{ sc.id }}" shape="rect" fit="cover" src="{{ sc.img }}" placeholder="{{ sc.name }}"></image-slot>
                   </div>
                   <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,15,0) 55%,rgba(13,13,15,.6) 100%);pointer-events:none"></div>
                 </sc-if>
@@ -1327,13 +1327,16 @@ class Component extends DCLogic {
     // once, since that's an explicit user action rather than the default view.
     // Home page "Explore Our Menu" carousel — same MENU array, so a card
     // here and its Menu-page category are always the same category. A dish
-    // photo (`img`) is only wired up for the three sections that already
-    // have a verified, caption-free product shot; the rest fall back to a
-    // plain "photography coming soon" card rather than a stand-in photo, so
-    // nothing on the home page misrepresents what's actually on the menu.
+    // photo (`img`) is only wired up for categories with a verified,
+    // caption-free product shot; the rest fall back to a plain "photography
+    // coming soon" card rather than a stand-in photo, so nothing on the
+    // home page misrepresents what's actually on the menu.
     const SHOWCASE_IMG = {
-      breakfast: './assets/aralikatte-idli.png',
+      breakfast: './assets/aralikatte-breakfast-tiffin.jpg',
+      'juices-milkshakes': './assets/aralikatte-juices-milkshakes.jpg',
+      'ice-creams': './assets/aralikatte-icecream-pistachio-rose.jpg',
       meals: './assets/aralikatte-gallery-02.png',
+      sweets: './assets/aralikatte-sweets-platter.jpg',
       beverages: './assets/aralikatte-coffee.png'
     };
     const showcaseCategories = MENU.map((c) => ({
