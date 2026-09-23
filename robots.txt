@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aralikatte.vercel.app/sitemap.xml
