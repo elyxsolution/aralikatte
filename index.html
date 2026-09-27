@@ -509,7 +509,7 @@
     <section style="padding:clamp(32px,4vw,56px) clamp(20px,5vw,64px) clamp(56px,7vw,104px)">
       <div style="max-width:1000px;margin:0 auto">
         <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-bottom:28px">
-          <p style="margin:0;font-size:14.5px;line-height:1.7;color:var(--text-2);max-width:46ch">Choose a category to see what's on it. Prices and additional sections are being confirmed with the cafe.</p>
+          <p style="margin:0;font-size:14.5px;line-height:1.7;color:var(--text-2);max-width:46ch">Choose a category to see what's on it, or browse all menu items at once.</p>
           <label style="display:flex;align-items:center;gap:10px;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.18);background:var(--surface-2);min-width:min(100%,260px)">
             <span style="width:13px;height:13px;border:1.5px solid var(--text-3);border-radius:50%;flex:none"></span>
             <input type="search" value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search the menu" aria-label="Search the menu" style="border:none;outline:none;background:none;font-size:14.5px;color:var(--text);width:100%">
@@ -550,17 +550,24 @@
               <p style="margin:0;padding:18px 4px;font-size:14.5px;line-height:1.7;color:var(--text-3);border-bottom:1px solid rgba(255,255,255,.1)">Items for this section are being finalised and will be added soon.</p>
             </sc-if>
             <sc-if value="{{ !cat.comingSoon }}" hint-placeholder-val="{{ true }}">
-              <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px">
+              <div style="display:flex;flex-direction:column;gap:2px">
                 <sc-for list="{{ cat.items }}" as="item" hint-placeholder-count="4">
-                  <li style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;padding:18px 4px;border-bottom:1px solid rgba(255,255,255,.1)">
-                    <span style="width:13px;height:13px;border:1.5px solid var(--red);border-radius:3px;display:flex;align-items:center;justify-content:center;flex:none" title="Vegetarian"><span style="width:6px;height:6px;border-radius:50%;background:var(--red-hover)"></span></span>
-                    <span style="font-size:17.5px;font-weight:600;color:var(--text)">{{ item.n }}</span>
-                    <span style="flex:1;min-width:20px;height:1px;background:rgba(255,255,255,.16)"></span>
-                    <span style="font-size:13px;color:var(--text-3);font-family:ui-monospace,SFMono-Regular,Menlo,monospace">{{ priceLabel }}</span>
-                    <p style="flex-basis:100%;margin:6px 0 0 31px;font-size:14.5px;line-height:1.65;color:var(--text-2);max-width:60ch">{{ item.d }}</p>
-                  </li>
+                  <div>
+                    <sc-if value="{{ item.groupLabel }}" hint-placeholder-val="{{ false }}">
+                      <div style="margin:22px 0 2px;padding:0 4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red-bright);font-weight:600">{{ item.groupLabel }}</div>
+                    </sc-if>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;padding:18px 4px;border-bottom:1px solid rgba(255,255,255,.1)">
+                      <span style="width:13px;height:13px;border:1.5px solid var(--red);border-radius:3px;display:flex;align-items:center;justify-content:center;flex:none" title="Vegetarian"><span style="width:6px;height:6px;border-radius:50%;background:var(--red-hover)"></span></span>
+                      <span style="font-size:17.5px;font-weight:600;color:var(--text)">{{ item.n }}</span>
+                      <span style="flex:1;min-width:20px;height:1px;background:rgba(255,255,255,.16)"></span>
+                      <span style="font-size:13px;color:var(--text-3);font-family:ui-monospace,SFMono-Regular,Menlo,monospace">{{ priceLabel }}</span>
+                      <sc-if value="{{ item.d }}" hint-placeholder-val="{{ false }}">
+                        <p style="flex-basis:100%;margin:6px 0 0 31px;font-size:14.5px;line-height:1.65;color:var(--text-2);max-width:60ch">{{ item.d }}</p>
+                      </sc-if>
+                    </div>
+                  </div>
                 </sc-for>
-              </ul>
+              </div>
             </sc-if>
           </div>
         </sc-for>
@@ -1047,37 +1054,132 @@
   </sc-if>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnouncementBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;showStickyMobileBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;priceDisplay&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Price — coming soon&quot;,&quot;Hide prices&quot;],&quot;default&quot;:&quot;Price — coming soon&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Menu&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnouncementBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;showStickyMobileBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;},&quot;priceDisplay&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Price — coming soon&quot;,&quot;Hide prices&quot;],&quot;default&quot;:&quot;Hide prices&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Menu&quot;}}">
 // ---------------------------------------------------------------------------
-// MENU — six category templates, per the client's brief. Each template is a
-// reusable container ({ id, name, note, items[] }); the Hero's category
-// links, the Menu page's category cards, the section list and the
-// empty-category state all read from this ONE array — the single source of
-// truth for categories everywhere on the site.
+// MENU — the client's final POS-sourced category structure: Breakfast, Meals,
+// Snacks, Beverages, Ice Creams, Juices. Each template is a reusable
+// container ({ id, name, note, items[] }); the Hero's category links, the
+// Menu page's category cards, the section list and the empty-category state
+// all read from this ONE array — the single source of truth for categories
+// everywhere on the site. The Menu page's "All Menu Items" card is not a
+// category here — it's a view over this same array (see ALL_CATEGORY_ID).
 // Categories with no verified items yet (`items: []`) render a "coming soon"
-// row instead of disappearing, so the template stays visible while empty and
-// is ready for the client's full menu.
+// row instead of disappearing, so the template stays visible while empty.
 // ---------------------------------------------------------------------------
+const ALL_CATEGORY_ID = 'all';
+
+// Breakfast is one top-level category internally organised into named groups
+// (Rice Items, Dosa & Tiffins, Idli, Shavige, Sweets) — the client's POS data,
+// not separate top-level nav sections. `group` on an item drives the small
+// heading rendered above the first item of each group on the Menu page.
+function riceItem(n) { return { n: n, d: '', group: 'Rice Items' }; }
+function dosaItem(n) { return { n: n, d: '', group: 'Dosa & Tiffins' }; }
+function idliItem(n) { return { n: n, d: '', group: 'Idli' }; }
+function shavigeItem(n) { return { n: n, d: '', group: 'Shavige' }; }
+function sweetItem(n) { return { n: n, d: '', group: 'Sweets' }; }
+
 const MENU = [
-  { id: 'breakfast', name: 'Breakfast / Tiffin', note: 'From 6:00 AM', items: [
-    { n: 'Idli', d: 'Steamed rice-and-lentil cakes, soft and mild, with chutney and sambar.' },
-    { n: 'Vada', d: 'Crisp lentil fritters, fried to order.' },
-    { n: 'Rava Idli', d: 'Semolina idli, light and savoury.' },
-    { n: 'Pongal', d: 'Rice and moong dal cooked down with pepper, cumin and ghee.' },
-    { n: 'Dose', d: 'A thin fermented crepe, crisp at the edges.' },
-    { n: 'Onion Dose', d: 'Dose layered with finely chopped onion.' },
-    { n: 'Masala Dose', d: 'Dose folded over spiced potato palya.' }
+  { id: 'breakfast', name: 'Breakfast', note: 'From 6:00 AM', items: [
+    riceItem('Kara Bath'),
+    riceItem('Bisibele Bath'),
+    riceItem('Rice Bath of the Day'),
+    riceItem('Aloo Capsicum Pala'),
+    riceItem('Curd Rice'),
+    riceItem('Puliyogre'),
+    riceItem('Tomato Bath'),
+    riceItem('Avrebele Chitranna'),
+    riceItem('Mango Rice'),
+    riceItem('Evening Rice Bath'),
+    riceItem('Soppu Rice'),
+    riceItem('Rasam Rice'),
+    riceItem('Lemon Rice'),
+    riceItem('Aralikatte Special Veg'),
+    riceItem('Mushroom Palav'),
+    riceItem('Ghee Curry Leaf Rice'),
+    riceItem('Ghee Garlic Pepper'),
+    riceItem('Pudina Tossed Rice'),
+    riceItem('Ghee Garlic Masala'),
+    riceItem('Ghee Pudi Tossed Rice'),
+    riceItem('Coconut Tossed Rice'),
+    riceItem('Tomato Tossed Rice'),
+    riceItem('Lemon Tossed Rice'),
+    riceItem('Gongura Tossed Rice'),
+    riceItem('Vegetable Tossed Rice'),
+    riceItem('Jeera Tossed Rice'),
+    riceItem('Ghee Pepper Capsicum'),
+    dosaItem('Pongal'),
+    dosaItem('Ghee Pudi Masala Dosa'),
+    dosaItem('Ghee Plain Dosa'),
+    dosaItem('Set Dosa'),
+    dosaItem('Rave Dosa'),
+    dosaItem('Onion Dosa'),
+    dosaItem('Benne Plain Dosa'),
+    dosaItem('Benne Masala Dosa'),
+    dosaItem('Open Benne Masale'),
+    dosaItem('Neer Dosa'),
+    dosaItem('Akki Rotti'),
+    dosaItem('Mysuru Masala Dosa'),
+    dosaItem('Special Dosa'),
+    dosaItem('Avarebele Dosa'),
+    dosaItem('Pudina Dosa'),
+    dosaItem('Multigrain Dosa'),
+    dosaItem('Ragi Dosa'),
+    dosaItem('Ragi Rotti'),
+    dosaItem('Jackfruit Dosa'),
+    dosaItem('Garlic Masale Dosa'),
+    dosaItem('Hesarattu'),
+    dosaItem('Ghee Paddu'),
+    dosaItem('Benne Pudi Masale'),
+    idliItem('Pudina Button Idli'),
+    idliItem('Lemon Button Idli'),
+    idliItem('Tomato Button Idli'),
+    idliItem('Capsicum Button Idli'),
+    idliItem('Garlic Masala Button Idli'),
+    shavigeItem('Pudina Tossed Shavige'),
+    shavigeItem('Garlic Masala Shavige'),
+    shavigeItem('Tomato Tossed Shavige'),
+    shavigeItem('Lemon Tossed Shavige'),
+    shavigeItem('Coconut Tossed Shavige'),
+    shavigeItem('Gongura Tossed Shavige'),
+    sweetItem('Sweet Pongal'),
+    sweetItem('Carrot Halwa'),
+    sweetItem('Halbai'),
+    sweetItem('Payasa'),
+    sweetItem('Jamoon'),
+    sweetItem('Dry Jamoon'),
+    sweetItem('Saffron Kesari Bath')
   ]},
-  { id: 'juices-milkshakes', name: 'Juices / Milkshakes', note: '', items: [] },
-  { id: 'ice-creams', name: 'Ice Creams', note: '', items: [] },
-  { id: 'meals', name: 'Lunch / Meals', note: 'All day', items: [
-    { n: 'Puliogre', d: 'Tamarind rice mixed with a dark, tangy spice paste.' }
+  { id: 'meals', name: 'Meals', note: 'All day', items: [
+    { n: 'South Meals', d: '' },
+    { n: 'Mudde Meals', d: '' },
+    { n: 'Arogya Meals', d: '' }
   ]},
-  { id: 'sweets', name: 'Sweets', note: '', items: [] },
+  { id: 'snacks', name: 'Snacks', note: '', items: [
+    { n: 'Bonda', d: '' },
+    { n: 'Puri', d: '' },
+    { n: 'Unde Pakoda', d: '' },
+    { n: 'Mangaluru Buns', d: '' },
+    { n: 'Mangaluru Buns — 2 pcs', d: '' },
+    { n: 'Peanut Masala', d: '' },
+    { n: 'Mixed Bajji', d: '' },
+    { n: 'Uddina Vade — 2 Piece', d: '' },
+    { n: 'Maddur Vade — 2 Piece', d: '' },
+    { n: 'Curd Vade', d: '' },
+    { n: 'Rave Vade', d: '' },
+    { n: 'Masala Vade', d: '' },
+    { n: 'Onion Pakoda', d: '' },
+    { n: 'Rasam Vade — 1 Piece', d: '' },
+    { n: 'Vade With Neer Chutney', d: '' },
+    { n: 'Mangaluru Bajji', d: '' },
+    { n: '1 Idli 1 Vade Sambar', d: '' },
+    { n: 'Vade Sambar Dip — 2 pcs', d: '' }
+  ]},
   { id: 'beverages', name: 'Beverages', note: 'Brewed fresh', items: [
     { n: 'Filter Coffee', d: 'Decoction and hot milk, served by the tumbler.' },
     { n: 'Tea', d: 'Strong, milky, served hot.' }
-  ]}
+  ]},
+  { id: 'ice-creams', name: 'Ice Creams', note: '', items: [] },
+  { id: 'juices', name: 'Juices', note: '', items: [] }
 ];
 
 // ---------------------------------------------------------------------------
@@ -1092,7 +1194,7 @@ function readRouteFromLocation() {
   const params = new URLSearchParams(window.location.search);
   const pageParam = params.get('page');
   const catParam = params.get('category');
-  const validCat = MENU.some((c) => c.id === catParam);
+  const validCat = catParam === ALL_CATEGORY_ID || MENU.some((c) => c.id === catParam);
   const page = ROUTE_PAGES.includes(pageParam) ? pageParam : (validCat ? 'menu' : 'home');
   return { page: page, cat: validCat ? catParam : null };
 }
@@ -1388,10 +1490,9 @@ class Component extends DCLogic {
     // home page misrepresents what's actually on the menu.
     const SHOWCASE_IMG = {
       breakfast: './assets/aralikatte-breakfast-tiffin.jpg',
-      'juices-milkshakes': './assets/aralikatte-juices-milkshakes.jpg',
+      juices: './assets/aralikatte-juices-milkshakes.jpg',
       'ice-creams': './assets/aralikatte-icecream-pistachio-rose.jpg',
       meals: './assets/aralikatte-gallery-02.png',
-      sweets: './assets/aralikatte-sweets-platter.jpg',
       beverages: './assets/aralikatte-coffee.png'
     };
     const showcaseCategories = MENU.map((c) => ({
@@ -1403,30 +1504,52 @@ class Component extends DCLogic {
       select: () => this.goMenuCategory(c.id)
     }));
 
-    const catCards = MENU.map((c) => {
-      const active = s.cat === c.id;
+    // catCards mirror MENU, with one extra pseudo-card — "All Menu Items" —
+    // prepended in front. It carries no items of its own (no data
+    // duplication); selecting it just points activeCategories at every
+    // MENU category below, the same path already used for a live search.
+    const totalItemCount = MENU.reduce((n, c) => n + c.items.length, 0);
+    const catCardFor = (id, name, count) => {
+      const active = s.cat === id;
       return {
-        id: c.id,
-        name: c.name,
-        tag: c.items.length ? (c.items.length + (c.items.length === 1 ? ' item' : ' items')) : 'Coming soon',
+        id: id,
+        name: name,
+        tag: count ? (count + (count === 1 ? ' item' : ' items')) : 'Coming soon',
         active: active,
         bg: active ? 'var(--red)' : 'var(--surface-2)',
         fg: active ? '#fff' : 'var(--text-strong)',
         sub: active ? 'rgba(255,255,255,.85)' : 'var(--text-3)',
         border: active ? 'var(--red)' : 'rgba(255,255,255,.14)',
-        select: () => this.selectCategory(c.id)
+        select: () => this.selectCategory(id)
       };
-    });
+    };
+    const catCards = [catCardFor(ALL_CATEGORY_ID, 'All Menu Items', totalItemCount)]
+      .concat(MENU.map((c) => catCardFor(c.id, c.name, c.items.length)));
 
-    const activeCategories = s.cat ? MENU.filter((c) => c.id === s.cat) : (q ? MENU : []);
+    // Breakfast's items carry a `group` (Rice Items / Dosa & Tiffins / Idli /
+    // Shavige / Sweets). withGroupLabels stamps a `groupLabel` only on the
+    // first item of each run so the template can render one small heading
+    // per group without a second, duplicated data structure — recomputed
+    // after search filtering so headings never appear before their items.
+    const withGroupLabels = (items) => {
+      let prevGroup;
+      return items.map((item) => {
+        const groupLabel = item.group && item.group !== prevGroup ? item.group : '';
+        prevGroup = item.group;
+        return Object.assign({}, item, { groupLabel: groupLabel });
+      });
+    };
+
+    const activeCategories = s.cat === ALL_CATEGORY_ID ? MENU : (s.cat ? MENU.filter((c) => c.id === s.cat) : (q ? MENU : []));
     const menu = activeCategories
       .map((c) => {
         const comingSoon = c.items.length === 0 && !q;
+        const items = c.items.filter((i) => !q || i.n.toLowerCase().includes(q) || i.d.toLowerCase().includes(q));
         return {
           name: c.name,
           note: c.note,
           comingSoon: comingSoon,
-          items: c.items.filter((i) => !q || i.n.toLowerCase().includes(q) || i.d.toLowerCase().includes(q))
+          items: withGroupLabels(items)
         };
       })
       .filter((c) => c.comingSoon || c.items.length > 0);
@@ -1485,7 +1608,7 @@ class Component extends DCLogic {
       empty: !showPrompt && menu.length === 0,
       query: s.q,
       onQuery: (e) => this.setState({ q: e.target.value }),
-      priceLabel: (this.props.priceDisplay ?? 'Price — coming soon') === 'Hide prices' ? '' : 'Price — coming soon',
+      priceLabel: (this.props.priceDisplay ?? 'Hide prices') === 'Hide prices' ? '' : 'Price — coming soon',
       galTabs: galTabs,
       gallery: gallery,
       sent: s.sent,
