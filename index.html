@@ -307,7 +307,7 @@
             <h2 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(30px,4.4vw,54px);line-height:1.06;letter-spacing:-.015em;color:var(--text-strong)">Something for every craving.</h2>
           </div>
           <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-            <p style="margin:0;max-width:36ch;font-size:15px;line-height:1.7;color:var(--text-2);text-wrap:pretty">Six ways into the kitchen — pick one to see what's on it.</p>
+            <p style="margin:0;max-width:36ch;font-size:15px;line-height:1.7;color:var(--text-2);text-wrap:pretty">Seven ways into the kitchen — pick one to see what's on it.</p>
             <div class="mc-arrows" style="gap:8px;flex:none">
               <button aria-label="Previous category" onClick="{{ mcPrev }}" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.08)">←</button>
               <button aria-label="Next category" onClick="{{ mcNext }}" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.08)">→</button>
@@ -583,42 +583,16 @@
       </div>
     </section>
 
-    <!-- SWEETS — dedicated showcase. Items come from Breakfast → Sweets in
-         MENU (not a second list); the track reuses the Home carousel's
-         .mc-track / .mc-card / .mc-arrows styles and scroll-snap behaviour.
-         Each slide is sized to its photo's own aspect ratio, so cover-fit
-         never crops or stretches it. -->
+    <!-- SWEETS — items come from Breakfast → Sweets in MENU (not a second
+         list), so they also stay in All Menu Items and search. -->
     <section aria-label="Sweets" style="background:var(--surface);padding:clamp(48px,6vw,96px) clamp(20px,5vw,64px)">
       <div style="max-width:1000px;margin:0 auto">
         <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:clamp(24px,3vw,32px)">
           <h2 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(26px,3.4vw,40px);color:var(--text-strong);white-space:nowrap">Sweets</h2>
           <span style="flex:1;min-width:20px;height:1px;background:rgba(255,255,255,.16)"></span>
           <span style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);font-weight:600;white-space:nowrap">{{ sweetsNote }}</span>
-          <div class="mc-arrows" style="gap:8px;flex:none">
-            <button aria-label="Previous photo" onClick="{{ sweetsPrev }}" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.08)">←</button>
-            <button aria-label="Next photo" onClick="{{ sweetsNext }}" style="width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:transparent;color:var(--text);cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;transition:border-color .2s,background .2s" style-hover="border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.08)">→</button>
-          </div>
         </div>
-
-        <div id="sweets-carousel" class="mc-track" style="display:flex;gap:clamp(16px,2vw,24px);overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 0 10px">
-          <div role="img" aria-label="Indian sweets platter" style="flex:none;height:min(440px,56vw);width:calc(min(440px,56vw) * 1000 / 667);scroll-snap-align:center">
-            <div class="mc-card" style="height:100%;position:relative;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:var(--surface-2)">
-              <div class="mc-img-inner" style="position:absolute;inset:0">
-                <image-slot id="sweets-platter" shape="rect" fit="cover" src="./assets/aralikatte-sweets-platter.jpg" placeholder="aralikatte-sweets-platter.jpg — Indian sweets platter"></image-slot>
-              </div>
-            </div>
-          </div>
-          <div role="img" aria-label="South Indian fritters platter with chutneys" style="flex:none;height:min(440px,56vw);width:calc(min(440px,56vw) * 960 / 1210);scroll-snap-align:center">
-            <div class="mc-card" style="height:100%;position:relative;border:1px solid rgba(255,255,255,.1);border-radius:18px;overflow:hidden;background:var(--surface-2)">
-              <div class="mc-img-inner" style="position:absolute;inset:0">
-                <image-slot id="sweets-fritters" shape="rect" fit="cover" src="./assets/aralikatte-sweets-carousel-fritters.jpg" placeholder="aralikatte-sweets-carousel-fritters.jpg — South Indian fritters platter"></image-slot>
-              </div>
-            </div>
-          </div>
-        </div>
-        <p class="mc-hint" style="margin:14px 0 0;text-align:center;font-size:12.5px;letter-spacing:.06em;color:var(--text-3)">Swipe for more →</p>
-
-        <div style="margin-top:clamp(24px,3vw,36px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));column-gap:32px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));column-gap:32px">
           <sc-for list="{{ sweets }}" as="sw" hint-placeholder-count="7">
             <div style="display:flex;gap:18px;align-items:baseline;padding:18px 4px;border-bottom:1px solid rgba(255,255,255,.1)">
               <span style="width:13px;height:13px;border:1.5px solid var(--red);border-radius:3px;display:flex;align-items:center;justify-content:center;flex:none;align-self:center" title="Vegetarian"><span style="width:6px;height:6px;border-radius:50%;background:var(--red-hover)"></span></span>
@@ -1409,13 +1383,8 @@ class Component extends DCLogic {
   // and comes back.
   initCarousel() {
     if (typeof window === 'undefined') return;
-    // Only one .mc-track is mounted at a time (Home's menu carousel or the
-    // Menu page's Sweets carousel), so one binding serves both.
-    const el = document.querySelector('.mc-track');
-    if (!el) {
-      if (this._carouselCleanup) this._carouselCleanup();
-      return;
-    }
+    const el = document.getElementById('menu-carousel');
+    if (!el) return;
     if (el === this._carouselEl) {
       if (this._carouselUpdate) this._carouselUpdate();
       return;
@@ -1459,9 +1428,9 @@ class Component extends DCLogic {
   // (scroll-snap-type:x mandatory on the track) settle on the nearest valid
   // card — simpler and more robust across the track's own edges than trying
   // to compute/target an exact card index by hand.
-  scrollCarousel(dir, trackId) {
+  scrollCarousel(dir) {
     if (typeof document === 'undefined') return;
-    const el = document.getElementById(trackId || 'menu-carousel');
+    const el = document.getElementById('menu-carousel');
     if (!el) return;
     const card = el.querySelector('.mc-card');
     const gap = parseFloat(getComputedStyle(el).columnGap || getComputedStyle(el).gap || '24') || 24;
@@ -1544,16 +1513,34 @@ class Component extends DCLogic {
       juices: './assets/aralikatte-juices-milkshakes.jpg',
       'ice-creams': './assets/aralikatte-icecream-pistachio-rose.jpg',
       meals: './assets/aralikatte-gallery-02.png',
+      snacks: './assets/aralikatte-snacks-fritters.jpg',
       beverages: './assets/aralikatte-coffee.png'
     };
-    const showcaseCategories = MENU.map((c) => ({
-      id: c.id,
-      name: c.name,
-      img: SHOWCASE_IMG[c.id] || '',
-      hasImg: !!SHOWCASE_IMG[c.id],
-      tag: c.items.length ? (c.items.length + (c.items.length === 1 ? ' item' : ' items')) : 'Coming soon',
-      select: () => this.goMenuCategory(c.id)
-    }));
+    // Sweets live inside Breakfast (Breakfast → Sweets) rather than being a
+    // MENU category, so their Home card is added by hand after Snacks and
+    // opens Breakfast, where they're listed.
+    const sweets = MENU.find((c) => c.id === 'breakfast').items.filter((i) => i.group === 'Sweets');
+    const showcaseCategories = [];
+    MENU.forEach((c) => {
+      showcaseCategories.push({
+        id: c.id,
+        name: c.name,
+        img: SHOWCASE_IMG[c.id] || '',
+        hasImg: !!SHOWCASE_IMG[c.id],
+        tag: c.items.length ? (c.items.length + (c.items.length === 1 ? ' item' : ' items')) : 'Coming soon',
+        select: () => this.goMenuCategory(c.id)
+      });
+      if (c.id === 'snacks') {
+        showcaseCategories.push({
+          id: 'sweets',
+          name: 'Sweets',
+          img: './assets/aralikatte-sweets-platter.jpg',
+          hasImg: true,
+          tag: sweets.length + ' items',
+          select: () => this.goMenuCategory('breakfast')
+        });
+      }
+    });
 
     // catCards mirror MENU, with one extra pseudo-card — "All Menu Items" —
     // prepended in front. It carries no items of its own (no data
@@ -1607,10 +1594,6 @@ class Component extends DCLogic {
 
     const showPrompt = !s.cat && !q;
 
-    // Dedicated Sweets showcase reads the same Breakfast → Sweets items, so
-    // they stay in one place in MENU (and in All Menu Items / search).
-    const sweets = MENU.find((c) => c.id === 'breakfast').items.filter((i) => i.group === 'Sweets');
-
     const gnames = ['All', 'Food', 'Cafe', 'Coffee', 'People'];
     const galTabs = gnames.map((n) => ({
       name: n,
@@ -1657,8 +1640,6 @@ class Component extends DCLogic {
       mcNext: () => this.scrollCarousel(1),
       sweets: sweets,
       sweetsNote: sweets.length + ' items',
-      sweetsPrev: () => this.scrollCarousel(-1, 'sweets-carousel'),
-      sweetsNext: () => this.scrollCarousel(1, 'sweets-carousel'),
       catCards: catCards,
       showPrompt: showPrompt,
       hasCategory: !!s.cat,
