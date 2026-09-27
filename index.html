@@ -554,7 +554,7 @@
                 <sc-for list="{{ cat.items }}" as="item" hint-placeholder-count="4">
                   <div>
                     <sc-if value="{{ item.groupLabel }}" hint-placeholder-val="{{ false }}">
-                      <div style="margin:22px 0 2px;padding:0 4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red-bright);font-weight:600">{{ item.groupLabel }}</div>
+                      <div id="{{ item.groupAnchor }}" style="margin:22px 0 2px;padding:0 4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red-bright);font-weight:600;scroll-margin-top:96px">{{ item.groupLabel }}</div>
                     </sc-if>
                     <div style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;padding:18px 4px;border-bottom:1px solid rgba(255,255,255,.1)">
                       <span style="width:13px;height:13px;border:1.5px solid var(--red);border-radius:3px;display:flex;align-items:center;justify-content:center;flex:none" title="Vegetarian"><span style="width:6px;height:6px;border-radius:50%;background:var(--red-hover)"></span></span>
@@ -579,26 +579,6 @@
         <div style="margin-top:clamp(34px,4vw,56px);display:flex;flex-wrap:wrap;gap:12px;align-items:center">
           <a href="tel:+917899542233" style="padding:16px 30px;border-radius:999px;background:var(--red);color:var(--text-strong);font-size:15px;font-weight:600;transition:background .25s" style-hover="background:var(--red-hover);color:var(--text-strong)">Call to Order · +91 78995 42233</a>
           <a href="https://maps.app.goo.gl/4aAoSGyCKxMjMUbf7" target="_blank" rel="noopener" style="padding:16px 30px;border-radius:999px;border:1px solid rgba(255,255,255,.32);color:var(--text-strong);font-size:15px;font-weight:600;transition:background .25s" style-hover="background:rgba(255,255,255,.08);color:var(--text-strong)">Visit Us</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- SWEETS — items come from Breakfast → Sweets in MENU (not a second
-         list), so they also stay in All Menu Items and search. -->
-    <section aria-label="Sweets" style="background:var(--surface);padding:clamp(48px,6vw,96px) clamp(20px,5vw,64px)">
-      <div style="max-width:1000px;margin:0 auto">
-        <div data-reveal style="display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-bottom:clamp(24px,3vw,32px)">
-          <h2 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(26px,3.4vw,40px);color:var(--text-strong);white-space:nowrap">Sweets</h2>
-          <span style="flex:1;min-width:20px;height:1px;background:rgba(255,255,255,.16)"></span>
-          <span style="font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3);font-weight:600;white-space:nowrap">{{ sweetsNote }}</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));column-gap:32px">
-          <sc-for list="{{ sweets }}" as="sw" hint-placeholder-count="7">
-            <div style="display:flex;gap:18px;align-items:baseline;padding:18px 4px;border-bottom:1px solid rgba(255,255,255,.1)">
-              <span style="width:13px;height:13px;border:1.5px solid var(--red);border-radius:3px;display:flex;align-items:center;justify-content:center;flex:none;align-self:center" title="Vegetarian"><span style="width:6px;height:6px;border-radius:50%;background:var(--red-hover)"></span></span>
-              <span style="font-size:17.5px;font-weight:600;color:var(--text)">{{ sw.n }}</span>
-            </div>
-          </sc-for>
         </div>
       </div>
     </section>
@@ -1270,7 +1250,7 @@ class Component extends DCLogic {
       this.setState({ page: r.page, cat: r.cat, navOpen: false });
     };
     window.addEventListener('popstate', this._onPopState);
-    if (this.state.page === 'menu' && this.state.cat) this.scrollToMenuTop();
+    if (this.state.page === 'menu' && this.state.cat) this.scrollToMenuTop(window.location.hash.slice(1));
 
     // Sticky-header lift: a tiny, throttled scroll flag rather than a
     // per-frame listener — only flips state (and re-renders) when the
@@ -1450,10 +1430,12 @@ class Component extends DCLogic {
   // Hero → Menu deep link: jump straight to the Menu page with a category
   // already selected, then scroll past the hero banner so the chosen
   // category's cards/items are the first thing in view.
-  goMenuCategory(id) {
+  // An optional `anchor` targets a group heading inside the category
+  // (e.g. Breakfast → Sweets) via the URL hash: ?page=menu&category=breakfast#sweets.
+  goMenuCategory(id, anchor) {
     this.setState({ page: 'menu', cat: id, navOpen: false, q: '' });
-    this.pushRoute('menu', id);
-    this.scrollToMenuTop();
+    this.pushRoute('menu', id, anchor);
+    this.scrollToMenuTop(anchor);
   }
 
   // In-page category switch (already on the Menu page) — no page-level
@@ -1469,10 +1451,10 @@ class Component extends DCLogic {
     this.pushRoute('menu', null);
   }
 
-  scrollToMenuTop() {
+  scrollToMenuTop(anchor) {
     if (typeof window === 'undefined') return;
     requestAnimationFrame(() => {
-      const el = document.getElementById('menu-categories');
+      const el = (anchor && document.getElementById(anchor)) || document.getElementById('menu-categories');
       if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
       else window.scrollTo({ top: 0, behavior: 'auto' });
     });
@@ -1480,14 +1462,14 @@ class Component extends DCLogic {
 
   // Single writer for the URL — query-string only (path stays "/") so deep
   // links work on a static host with no server-side rewrites needed.
-  pushRoute(page, catId) {
+  pushRoute(page, catId, anchor) {
     if (typeof window === 'undefined' || !window.history || !window.history.pushState) return;
     const params = new URLSearchParams();
     if (page && page !== 'home') params.set('page', page);
     if (catId) params.set('category', catId);
     const qs = params.toString();
-    const path = window.location.pathname + (qs ? '?' + qs : '');
-    if (path === window.location.pathname + window.location.search) return;
+    const path = window.location.pathname + (qs ? '?' + qs : '') + (anchor ? '#' + anchor : '');
+    if (path === window.location.pathname + window.location.search + window.location.hash) return;
     window.history.pushState({ page: page, category: catId || null }, '', path);
   }
 
@@ -1518,7 +1500,7 @@ class Component extends DCLogic {
     };
     // Sweets live inside Breakfast (Breakfast → Sweets) rather than being a
     // MENU category, so their Home card is added by hand after Snacks and
-    // opens Breakfast, where they're listed.
+    // opens Breakfast scrolled to its Sweets group heading.
     const sweets = MENU.find((c) => c.id === 'breakfast').items.filter((i) => i.group === 'Sweets');
     const showcaseCategories = [];
     MENU.forEach((c) => {
@@ -1537,7 +1519,7 @@ class Component extends DCLogic {
           img: './assets/aralikatte-sweets-platter.jpg',
           hasImg: true,
           tag: sweets.length + ' items',
-          select: () => this.goMenuCategory('breakfast')
+          select: () => this.goMenuCategory('breakfast', 'sweets')
         });
       }
     });
@@ -1573,8 +1555,9 @@ class Component extends DCLogic {
       let prevGroup;
       return items.map((item) => {
         const groupLabel = item.group && item.group !== prevGroup ? item.group : '';
+        const groupAnchor = groupLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
         prevGroup = item.group;
-        return Object.assign({}, item, { groupLabel: groupLabel });
+        return Object.assign({}, item, { groupLabel: groupLabel, groupAnchor: groupAnchor });
       });
     };
 
@@ -1638,8 +1621,6 @@ class Component extends DCLogic {
       showcaseCategories: showcaseCategories,
       mcPrev: () => this.scrollCarousel(-1),
       mcNext: () => this.scrollCarousel(1),
-      sweets: sweets,
-      sweetsNote: sweets.length + ' items',
       catCards: catCards,
       showPrompt: showPrompt,
       hasCategory: !!s.cat,
