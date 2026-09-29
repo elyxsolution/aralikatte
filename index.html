@@ -642,6 +642,43 @@
       </div>
     </section>
 
+    <!-- ====================== FOUNDER'S VISION ======================
+         The vision copy lives in the VISION constant in the logic block at
+         the foot of this file — paragraphs, tagline and attribution — so it
+         can be updated without touching this markup. Composition: a short
+         editorial statement on the left, the vision paragraphs on the
+         right, attribution as a byline row beneath both — an article
+         masthead, not a text box.
+    -->
+    <section id="founders-vision" style="padding:0 clamp(20px,5vw,64px) clamp(64px,8vw,120px)">
+      <div data-reveal style="position:relative;max-width:1180px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:28px;padding:clamp(40px,6vw,80px) clamp(28px,6vw,72px);overflow:hidden">
+        <span aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)"></span>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:clamp(36px,6vw,80px);align-items:center">
+          <div>
+            <div style="font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--red-bright);font-weight:600;margin-bottom:24px">Founder's Vision</div>
+            <div style="font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(26px,3.4vw,42px);line-height:1.28;letter-spacing:-.01em;color:var(--text-strong)">
+              <sc-for list="{{ visionTagline }}" as="line" hint-placeholder-count="4">
+                <span style="display:block">{{ line }}</span>
+              </sc-for>
+            </div>
+            <span aria-hidden="true" style="display:block;width:44px;height:2px;background:var(--red);margin-top:26px"></span>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:16px;padding-left:clamp(0px,4vw,8px)">
+            <sc-for list="{{ visionParagraphs }}" as="p" hint-placeholder-count="5">
+              <p style="margin:0;font-size:clamp(14.5px,1.5vw,16px);line-height:1.8;color:var(--text-2);text-wrap:pretty">{{ p }}</p>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="margin-top:clamp(36px,5vw,56px);padding-top:clamp(22px,3vw,30px);border-top:1px solid var(--line);display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px 20px">
+          <cite style="font-style:normal;font-size:16px;font-weight:600;color:var(--text-strong)">{{ visionFounders }}</cite>
+          <span style="font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--text-3);font-weight:600">{{ visionRole }}</span>
+        </div>
+      </div>
+    </section>
+
     <section style="padding:0 clamp(20px,5vw,64px) clamp(56px,7vw,104px)">
       <div data-reveal style="max-width:1240px;margin:0 auto;background:var(--panel);border-radius:26px;padding:clamp(34px,5vw,64px);color:var(--text);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
         <h2 style="margin:0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(26px,3.4vw,42px);line-height:1.1;max-width:22ch">Come by for breakfast.</h2>
@@ -1188,6 +1225,22 @@ const GALLERY = [
   { id: '12', cat: 'People', file: 'aralikatte-gallery-12.jpg', src: GAL_SRC + '12.png' }
 ];
 
+// ---------------------------------------------------------------------------
+// FOUNDER'S VISION — as supplied by the client.
+// ---------------------------------------------------------------------------
+const VISION = {
+  paragraphs: [
+    'Aralikatte is a premium South Indian QSR built around food, culture, music and togetherness.',
+    'Founded by Navaneeth Gowda & Kawitha Reddy, Aralikatte brings authentic Karnataka and South Indian food into a modern QSR experience inspired by the traditional Katte.',
+    'Our vision is to celebrate South Indian culture through traditional architecture, authentic flavours, warm hospitality, creativity and music — creating a place where everyone feels at home.',
+    'From traditional breakfast, Karnataka Oota and filter coffee to our Creative Corner, free Open Mic and Jamming sessions, Aralikatte brings people together to eat, connect and celebrate.',
+    'We aim to build Aralikatte into a leading South Indian QSR brand from India, taking the taste and culture of South India to every corner of the country and beyond.'
+  ],
+  tagline: ['Authentic Food.', 'Rich Culture.', 'Good Music.', 'One Aralikatte.'],
+  founders: 'Navaneeth Gowda & Kawitha Reddy',
+  role: 'Founders, Aralikatte'
+};
+
 class Component extends DCLogic {
   state = (() => {
     const r = readRouteFromLocation();
@@ -1557,6 +1610,10 @@ class Component extends DCLogic {
       isHome: s.page === 'home',
       isMenu: s.page === 'menu',
       isStory: s.page === 'story',
+      visionParagraphs: VISION.paragraphs,
+      visionTagline: VISION.tagline,
+      visionFounders: VISION.founders,
+      visionRole: VISION.role,
       isGallery: s.page === 'gallery',
       isContact: s.page === 'contact',
       isCatering: s.page === 'catering',
