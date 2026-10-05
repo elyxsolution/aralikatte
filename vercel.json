@@ -1,5 +1,7 @@
 {
-  "trailingSlash": true,
+  "functions": {
+    "api/contact.js": { "maxDuration": 30 }
+  },
   "redirects": [
     {
       "source": "/:path*",
@@ -7,7 +9,8 @@
       "destination": "https://www.aralikattecafe.in/:path*",
       "permanent": true
     },
-    { "source": "/index.html", "destination": "/", "permanent": true }
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/:page(menu|our-story|gallery|catering|contact)", "destination": "/:page/", "permanent": true }
   ],
   "headers": [
     {

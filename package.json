@@ -6,7 +6,8 @@
   "scripts": {
     "images": "node scripts/optimize-images.mjs",
     "build": "node scripts/build.mjs",
-    "verify": "node scripts/verify.mjs"
+    "verify": "node scripts/verify.mjs",
+    "test:contact": "node scripts/test-contact.mjs"
   },
   "devDependencies": {
     "puppeteer-core": "^24.0.0",

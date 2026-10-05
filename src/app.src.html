@@ -84,6 +84,10 @@
   /* Skip link — visible only when keyboard-focused. */
   .skip-link{position:absolute;left:-9999px;top:0;z-index:100;padding:12px 18px;background:var(--red);color:#fff;font-weight:600;border-radius:0 0 10px 0}
   .skip-link:focus{left:0;color:#fff}
+  /* Enquiry forms: screen-reader-only status text, and the spam honeypot
+     field, which people never see (bots fill it in). */
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  .hp-field{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden}
 </style>
 </helmet>
 <div style="min-height:100vh;background:var(--bg);color:var(--text);font-family:Manrope,system-ui,sans-serif">
@@ -688,30 +692,35 @@
         <div style="background:var(--surface);border-radius:22px;padding:clamp(26px,3vw,40px)">
           <h2 style="margin:0 0 8px;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(24px,3vw,34px);color:var(--text-strong)">Send a message</h2>
           <p style="margin:0 0 26px;font-size:14.5px;line-height:1.7;color:var(--text-2)">We reply on the number you leave.</p>
+          <p class="sr-only" role="status" aria-live="polite">{{ contactLive }}</p>
           <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
-            <div style="border:1px solid var(--red-line);border-radius:16px;padding:22px 24px;background:var(--surface-3)">
+            <div id="contact-success" tabIndex="-1" style="border:1px solid var(--red-line);border-radius:16px;padding:22px 24px;background:var(--surface-3)">
               <p style="margin:0;font-size:15.5px;line-height:1.7;color:var(--text-strong)">Thank you — your message is noted. The cafe will get back to you.</p>
             </div>
           </sc-if>
           <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
-            <form onSubmit="{{ onSubmit }}" style="display:flex;flex-direction:column;gap:18px">
+            <form onSubmit="{{ onSubmit }}" method="post" aria-busy="{{ contactSending }}" style="display:flex;flex-direction:column;gap:18px">
               <label style="display:flex;flex-direction:column;gap:8px">
                 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Name</span>
-                <input type="text" name="name" autoComplete="name" required placeholder="Your name" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                <input type="text" name="name" autoComplete="name" required maxLength="100" placeholder="Your name" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
               </label>
               <label style="display:flex;flex-direction:column;gap:8px">
                 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Phone</span>
-                <input type="tel" name="phone" autoComplete="tel" required placeholder="+91" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                <input type="tel" name="phone" autoComplete="tel" required maxLength="20" placeholder="+91" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
               </label>
               <label style="display:flex;flex-direction:column;gap:8px">
                 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Email <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:500">(optional)</span></span>
-                <input type="email" name="email" autoComplete="email" placeholder="you@example.com" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                <input type="email" name="email" autoComplete="email" maxLength="254" placeholder="you@example.com" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
               </label>
               <label style="display:flex;flex-direction:column;gap:8px">
                 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Message</span>
-                <textarea name="message" required rows="4" placeholder="How can we help?" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text);resize:vertical"></textarea>
+                <textarea name="message" required maxLength="2000" rows="4" placeholder="How can we help?" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text);resize:vertical"></textarea>
               </label>
-              <button type="submit" style="padding:17px 30px;border-radius:999px;background:var(--red);color:var(--text-strong);border:none;font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:var(--red-hover)">Send message</button>
+              <div class="hp-field" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabIndex="-1" autoComplete="off"></label></div>
+              <button type="submit" disabled="{{ contactSending }}" style="padding:17px 30px;border-radius:999px;background:var(--red);color:var(--text-strong);border:none;font-size:15px;font-weight:600;cursor:{{ contactCursor }};opacity:{{ contactOpacity }};transition:background .25s" style-hover="background:var(--red-hover)">{{ contactBtnLabel }}</button>
+              <sc-if value="{{ contactError }}" hint-placeholder-val="{{ false }}">
+                <p role="alert" style="margin:0;font-size:14.5px;line-height:1.6;color:var(--red-bright)">{{ contactError }}</p>
+              </sc-if>
             </form>
           </sc-if>
         </div>
@@ -868,41 +877,42 @@
           </div>
         </div>
         <div style="background:var(--surface-2);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:clamp(26px,3vw,40px)">
+          <p class="sr-only" role="status" aria-live="polite">{{ catLive }}</p>
           <sc-if value="{{ catSent }}" hint-placeholder-val="{{ false }}">
-            <div style="border:1px solid var(--red-line);border-radius:16px;padding:22px 24px;background:var(--surface-3)">
+            <div id="catering-success" tabIndex="-1" style="border:1px solid var(--red-line);border-radius:16px;padding:22px 24px;background:var(--surface-3)">
               <p style="margin:0;font-size:15.5px;line-height:1.7;color:var(--text-strong)">Thank you — your catering enquiry is noted. The cafe will get back to you on the number you left.</p>
             </div>
           </sc-if>
           <sc-if value="{{ catNotSent }}" hint-placeholder-val="{{ true }}">
-            <form onSubmit="{{ onCatSubmit }}" style="display:flex;flex-direction:column;gap:16px">
+            <form onSubmit="{{ onCatSubmit }}" method="post" aria-busy="{{ catSending }}" style="display:flex;flex-direction:column;gap:16px">
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:16px">
                 <label style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Name</span>
-                  <input type="text" name="name" autoComplete="name" required placeholder="Your name" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                  <input type="text" name="name" autoComplete="name" required maxLength="100" placeholder="Your name" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
                 </label>
                 <label style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Phone</span>
-                  <input type="tel" name="phone" autoComplete="tel" required placeholder="+91" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                  <input type="tel" name="phone" autoComplete="tel" required maxLength="20" placeholder="+91" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
                 </label>
               </div>
               <label style="display:flex;flex-direction:column;gap:8px">
                 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Email <span style="text-transform:none;letter-spacing:0;color:var(--text-3);font-weight:500">(optional)</span></span>
-                <input type="email" name="email" autoComplete="email" placeholder="you@example.com" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                <input type="email" name="email" autoComplete="email" maxLength="254" placeholder="you@example.com" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
               </label>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:16px">
                 <label style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Event date</span>
-                  <input type="date" name="event_date" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                  <input type="date" name="eventDate" required min="{{ todayIso }}" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
                 </label>
                 <label style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Guests</span>
-                  <input type="number" name="guests" min="1" placeholder="Approx." style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                  <input type="number" name="guests" required min="1" max="10000" step="1" placeholder="Approx." style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
                 </label>
               </div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:16px">
                 <label style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Event type</span>
-                  <select name="event_type" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text);font-family:inherit">
+                  <select name="eventType" required style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text);font-family:inherit">
                     <option>Corporate</option>
                     <option>Family Gathering</option>
                     <option>Birthday</option>
@@ -913,14 +923,18 @@
                 </label>
                 <label style="display:flex;flex-direction:column;gap:8px">
                   <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Location</span>
-                  <input type="text" name="location" placeholder="Area in Bengaluru" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
+                  <input type="text" name="location" required maxLength="150" placeholder="Area in Bengaluru" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text)">
                 </label>
               </div>
               <label style="display:flex;flex-direction:column;gap:8px">
                 <span style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);font-weight:600">Message</span>
-                <textarea name="message" rows="4" placeholder="Tell us about the occasion" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text);resize:vertical"></textarea>
+                <textarea name="message" required maxLength="2000" rows="4" placeholder="Tell us about the occasion" style="padding:15px 17px;border-radius:12px;border:1px solid var(--line-2);background:var(--surface-3);font-size:15px;color:var(--text);resize:vertical"></textarea>
               </label>
-              <button type="submit" style="padding:17px 30px;border-radius:999px;background:var(--red);color:var(--text);border:none;font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:var(--red-hover)">Send Catering Enquiry</button>
+              <div class="hp-field" aria-hidden="true"><label>Leave this field empty <input type="text" name="website" tabIndex="-1" autoComplete="off"></label></div>
+              <button type="submit" disabled="{{ catSending }}" style="padding:17px 30px;border-radius:999px;background:var(--red);color:var(--text);border:none;font-size:15px;font-weight:600;cursor:{{ catCursor }};opacity:{{ catOpacity }};transition:background .25s" style-hover="background:var(--red-hover)">{{ catBtnLabel }}</button>
+              <sc-if value="{{ catError }}" hint-placeholder-val="{{ false }}">
+                <p role="alert" style="margin:0;font-size:14.5px;line-height:1.6;color:var(--red-bright)">{{ catError }}</p>
+              </sc-if>
             </form>
           </sc-if>
         </div>
@@ -1190,10 +1204,14 @@ const VISION = {
 class Component extends DCLogic {
   state = (() => {
     const r = readRouteFromLocation();
-    return { page: r.page, navOpen: false, w: typeof window !== 'undefined' ? window.innerWidth : 1440, scrolled: false, cat: r.cat, q: '', gcat: 'All', sent: false, catSent: false };
+    return { page: r.page, navOpen: false, w: typeof window !== 'undefined' ? window.innerWidth : 1440, scrolled: false, cat: r.cat, q: '', gcat: 'All', sent: false, catSent: false,
+      contactSending: false, contactError: '', contactLive: '', catSending: false, catError: '', catLive: '' };
   })();
 
   componentDidMount() {
+    // Enquiry forms: time-on-page for the server's bot check; in-flight guard.
+    this._mountedAt = Date.now();
+    this._sending = {};
     this._onResize = () => this.setState({ w: window.innerWidth });
     this._onResize();
     window.addEventListener('resize', this._onResize);
@@ -1388,6 +1406,64 @@ class Component extends DCLogic {
     const step = (card ? card.getBoundingClientRect().width : el.clientWidth * 0.8) + gap;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     el.scrollBy({ left: dir * step, behavior: reduced ? 'auto' : 'smooth' });
+  }
+
+  // Enquiry forms (general contact + catering). Both POST JSON to the same
+  // serverless endpoint, /api/contact (api/contact.js), which validates the
+  // data again and relays it to the cafe's Google Apps Script mailer. The Apps
+  // Script URL and secret live only on the server. Success is shown only when
+  // the server confirms the email was handed to Apps Script.
+  async submitEnquiry(e, formType) {
+    if (e && e.preventDefault) e.preventDefault();
+    const form = e && (e.currentTarget || e.target);
+    if (!form || !this._sending || this._sending[formType]) return; // ignore double clicks
+    if (form.checkValidity && !form.checkValidity()) { form.reportValidity(); return; }
+    const k = formType === 'catering'
+      ? { sending: 'catSending', error: 'catError', live: 'catLive', sent: 'catSent', box: 'catering-success', done: 'Thank you — your catering enquiry has been sent.' }
+      : { sending: 'contactSending', error: 'contactError', live: 'contactLive', sent: 'sent', box: 'contact-success', done: 'Thank you — your message has been sent.' };
+    const fields = formType === 'catering'
+      ? ['name', 'phone', 'email', 'eventDate', 'guests', 'eventType', 'location', 'message']
+      : ['name', 'phone', 'email', 'message'];
+    const fd = new FormData(form);
+    const payload = { formType: formType, website: String(fd.get('website') || ''), elapsedMs: Date.now() - (this._mountedAt || 0) };
+    fields.forEach((f) => { payload[f] = String(fd.get(f) || ''); });
+    Array.from(form.querySelectorAll('[aria-invalid]')).forEach((el) => el.removeAttribute('aria-invalid'));
+
+    this._sending[formType] = true;
+    this.setState({ [k.sending]: true, [k.error]: '', [k.live]: 'Sending…' });
+    let res = null;
+    let data = null;
+    try {
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 35000) : null; // the mailer can take ~15-25s
+      res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+        signal: ctrl ? ctrl.signal : undefined
+      });
+      if (timer) clearTimeout(timer);
+      data = await res.json().catch(() => null);
+    } catch (err) {
+      res = null; // offline, blocked or timed out
+    }
+    this._sending[formType] = false;
+
+    if (res && res.ok && data && data.success === true) {
+      form.reset();
+      this.setState({ [k.sending]: false, [k.sent]: true, [k.live]: k.done });
+      // move focus to the confirmation (the form and its button are gone now)
+      const focusBox = (tries) => { const box = document.getElementById(k.box); if (box) box.focus(); else if (tries > 0) setTimeout(() => focusBox(tries - 1), 50); };
+      requestAnimationFrame(() => focusBox(10));
+      return;
+    }
+    // Keep everything the visitor typed; flag the fields the server rejected.
+    const errs = data && data.errors && typeof data.errors === 'object' ? data.errors : null;
+    if (errs) Object.keys(errs).forEach((name) => { const el = form.elements[name]; if (el && el.setAttribute) el.setAttribute('aria-invalid', 'true'); });
+    const msg = errs
+      ? data.message
+      : ((data && data.message) || 'Unable to submit your enquiry.') + ' Please try again, or call us on +91 78995 42233.';
+    this.setState({ [k.sending]: false, [k.error]: msg, [k.live]: '' });
   }
 
   // Plain left-click on a link -> in-app navigation; modified clicks (new tab,
@@ -1628,7 +1704,14 @@ class Component extends DCLogic {
       goCatering: (e) => this.navTo(e, 'catering'),
       catSent: s.catSent,
       catNotSent: !s.catSent,
-      onCatSubmit: (e) => { e.preventDefault(); this.setState({ catSent: true }); },
+      onCatSubmit: (e) => this.submitEnquiry(e, 'catering'),
+      catSending: s.catSending,
+      catError: s.catError,
+      catLive: s.catLive,
+      catBtnLabel: s.catSending ? 'Sending…' : 'Send Catering Enquiry',
+      catCursor: s.catSending ? 'progress' : 'pointer',
+      catOpacity: s.catSending ? '.7' : '1',
+      todayIso: (() => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })(),
       goHome: (e) => this.navTo(e, 'home'),
       goMenu: (e) => this.navTo(e, 'menu'),
       goStory: (e) => this.navTo(e, 'story'),
@@ -1651,7 +1734,13 @@ class Component extends DCLogic {
       gallery: gallery,
       sent: s.sent,
       notSent: !s.sent,
-      onSubmit: (e) => { e.preventDefault(); this.setState({ sent: true }); }
+      onSubmit: (e) => this.submitEnquiry(e, 'general'),
+      contactSending: s.contactSending,
+      contactError: s.contactError,
+      contactLive: s.contactLive,
+      contactBtnLabel: s.contactSending ? 'Sending…' : 'Send message',
+      contactCursor: s.contactSending ? 'progress' : 'pointer',
+      contactOpacity: s.contactSending ? '.7' : '1'
     };
   }
 }

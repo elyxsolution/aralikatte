@@ -7,3 +7,10 @@ node_modules
 package.json
 package-lock.json
 docs
+
+# never upload local secrets with a CLI deploy
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
