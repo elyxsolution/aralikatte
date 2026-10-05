@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aralikatte.vercel.app/sitemap.xml
+Sitemap: https://www.aralikattecafe.in/sitemap.xml

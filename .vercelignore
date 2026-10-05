@@ -1,0 +1,9 @@
+# authoring sources / tooling — the deployed site is the generated HTML + assets
+src
+scripts
+uploads
+node_modules
+.shots
+package.json
+package-lock.json
+docs

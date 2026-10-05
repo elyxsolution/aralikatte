@@ -1,0 +1,288 @@
+{
+ "aralikatte-breakfast-tiffin": {
+  "width": 1760,
+  "height": 2080,
+  "variants": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "aralikatte-cafe-exterior": {
+  "width": 516,
+  "height": 850,
+  "variants": [
+   480,
+   516
+  ]
+ },
+ "aralikatte-coffee": {
+  "width": 407,
+  "height": 429,
+  "variants": [
+   407
+  ]
+ },
+ "aralikatte-gallery-01": {
+  "width": 713,
+  "height": 846,
+  "variants": [
+   480,
+   713
+  ]
+ },
+ "aralikatte-gallery-02": {
+  "width": 501,
+  "height": 791,
+  "variants": [
+   480,
+   501
+  ]
+ },
+ "aralikatte-gallery-03": {
+  "width": 499,
+  "height": 744,
+  "variants": [
+   480,
+   499
+  ]
+ },
+ "aralikatte-gallery-04": {
+  "width": 490,
+  "height": 622,
+  "variants": [
+   480,
+   490
+  ]
+ },
+ "aralikatte-gallery-05": {
+  "width": 711,
+  "height": 834,
+  "variants": [
+   480,
+   711
+  ]
+ },
+ "aralikatte-gallery-06": {
+  "width": 279,
+  "height": 339,
+  "variants": [
+   279
+  ]
+ },
+ "aralikatte-gallery-07": {
+  "width": 504,
+  "height": 668,
+  "variants": [
+   480,
+   504
+  ]
+ },
+ "aralikatte-gallery-08": {
+  "width": 503,
+  "height": 773,
+  "variants": [
+   480,
+   503
+  ]
+ },
+ "aralikatte-gallery-09": {
+  "width": 502,
+  "height": 728,
+  "variants": [
+   480,
+   502
+  ]
+ },
+ "aralikatte-gallery-10": {
+  "width": 498,
+  "height": 785,
+  "variants": [
+   480,
+   498
+  ]
+ },
+ "aralikatte-gallery-11": {
+  "width": 279,
+  "height": 328,
+  "variants": [
+   279
+  ]
+ },
+ "aralikatte-gallery-12": {
+  "width": 855,
+  "height": 687,
+  "variants": [
+   480,
+   855
+  ]
+ },
+ "aralikatte-hero-breakfast": {
+  "width": 1400,
+  "height": 750,
+  "variants": [
+   480,
+   960,
+   1400
+  ]
+ },
+ "aralikatte-hero-thali": {
+  "width": 1600,
+  "height": 900,
+  "variants": [
+   480,
+   960,
+   1600
+  ]
+ },
+ "aralikatte-hero": {
+  "width": 600,
+  "height": 400,
+  "variants": [
+   480,
+   600
+  ]
+ },
+ "aralikatte-icecream-pistachio-rose": {
+  "width": 1080,
+  "height": 1080,
+  "variants": [
+   480,
+   960,
+   1080
+  ]
+ },
+ "aralikatte-idli": {
+  "width": 1536,
+  "height": 1024,
+  "variants": [
+   480,
+   960,
+   1536
+  ]
+ },
+ "aralikatte-ig-01": {
+  "width": 506,
+  "height": 617,
+  "variants": [
+   480,
+   506
+  ]
+ },
+ "aralikatte-ig-02": {
+  "width": 671,
+  "height": 777,
+  "variants": [
+   480,
+   671
+  ]
+ },
+ "aralikatte-ig-03": {
+  "width": 665,
+  "height": 769,
+  "variants": [
+   480,
+   665
+  ]
+ },
+ "aralikatte-ig-04": {
+  "width": 663,
+  "height": 850,
+  "variants": [
+   480,
+   663
+  ]
+ },
+ "aralikatte-ig-05": {
+  "width": 893,
+  "height": 890,
+  "variants": [
+   480,
+   893
+  ]
+ },
+ "aralikatte-ig-06": {
+  "width": 675,
+  "height": 889,
+  "variants": [
+   480,
+   675
+  ]
+ },
+ "aralikatte-interior": {
+  "width": 514,
+  "height": 331,
+  "variants": [
+   480,
+   514
+  ]
+ },
+ "aralikatte-juices-milkshakes": {
+  "width": 791,
+  "height": 475,
+  "variants": [
+   480,
+   791
+  ]
+ },
+ "aralikatte-onion-dose": {
+  "width": 1536,
+  "height": 1024,
+  "variants": [
+   480,
+   960,
+   1536
+  ]
+ },
+ "aralikatte-pongal": {
+  "width": 1536,
+  "height": 1024,
+  "variants": [
+   480,
+   960,
+   1536
+  ]
+ },
+ "aralikatte-rava-idli": {
+  "width": 1536,
+  "height": 1024,
+  "variants": [
+   480,
+   960,
+   1536
+  ]
+ },
+ "aralikatte-snacks-fritters": {
+  "width": 960,
+  "height": 1210,
+  "variants": [
+   480,
+   960
+  ]
+ },
+ "aralikatte-story-hero": {
+  "width": 336,
+  "height": 328,
+  "variants": [
+   336
+  ]
+ },
+ "aralikatte-sweets-platter": {
+  "width": 1000,
+  "height": 667,
+  "variants": [
+   480,
+   960,
+   1000
+  ]
+ },
+ "aralikatte-vada": {
+  "width": 1536,
+  "height": 1024,
+  "variants": [
+   480,
+   960,
+   1536
+  ]
+ }
+}
