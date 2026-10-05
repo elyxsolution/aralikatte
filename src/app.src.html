@@ -1435,7 +1435,7 @@ class Component extends DCLogic {
     let data = null;
     try {
       const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      const timer = ctrl ? setTimeout(() => ctrl.abort(), 35000) : null; // the mailer can take ~15-25s
+      const timer = ctrl ? setTimeout(() => ctrl.abort(), 65000) : null; // outlasts the API function (max 60s) so its real answer always arrives
       res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },

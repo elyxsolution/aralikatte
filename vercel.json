@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/contact.js": { "maxDuration": 30 }
+    "api/contact.js": { "maxDuration": 60 }
   },
   "redirects": [
     {
