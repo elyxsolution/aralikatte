@@ -199,7 +199,7 @@
         <p data-reveal style="margin:22px 0 0;font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(16px,1.9vw,20px);line-height:1.4;color:var(--red-bright)">Come for the Oota.<br>Stay for the Katte.<br>Leave with a memory.</p>
         <div data-reveal style="display:flex;flex-wrap:wrap;gap:12px;margin-top:30px;pointer-events:auto">
           <a href="/menu/" onClick="{{ goMenu }}" style="display:inline-block;text-align:center;padding:17px 30px;border-radius:999px;background:var(--red);color:#fff;border:none;font-size:15px;font-weight:600;cursor:pointer;transition:transform .25s,background .25s" style-hover="background:var(--red-hover);transform:translateY(-2px)">Explore Menu</a>
-          <a href="/our-story/" onClick="{{ goStory }}" style="display:inline-block;text-align:center;display:inline-flex;align-items:center;gap:10px;padding:15px 30px 15px 20px;border-radius:999px;border:1px solid var(--line-3);background:transparent;color:var(--text-strong);font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:rgba(255,255,255,.1);color:var(--text-strong)">
+          <a href="/our-story/#story-video" onClick="{{ playStory }}" style="display:inline-block;text-align:center;display:inline-flex;align-items:center;gap:10px;padding:15px 30px 15px 20px;border-radius:999px;border:1px solid var(--line-3);background:transparent;color:var(--text-strong);font-size:15px;font-weight:600;cursor:pointer;transition:background .25s" style-hover="background:rgba(255,255,255,.1);color:var(--text-strong)">
             <span aria-hidden="true" style="width:26px;height:26px;border-radius:50%;border:1.5px solid var(--red-bright);display:flex;align-items:center;justify-content:center;flex:none">
               <span style="width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent var(--red-bright);margin-left:2px"></span>
             </span>
@@ -539,6 +539,13 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- Client video (portrait 1080x1920). The homepage "Discover Aralikatte"
+         button opens this page and plays it (see playStoryVideo). The #t=0.1
+         fragment makes iOS show the first frame instead of a blank box. -->
+    <section id="story-video" style="padding:clamp(32px,4vw,56px) clamp(20px,5vw,64px) 0;scroll-margin-top:24px">
+      <video id="story-video-player" src="/IMG_0317.MP4#t=0.1" controls="controls" playsInline="playsinline" preload="metadata" aria-label="Aralikatte Cafe video" style="display:block;margin:0 auto;width:min(100%,calc(min(80vh,720px) * 9 / 16));aspect-ratio:9/16;height:auto;border-radius:26px;background:#000"></video>
     </section>
 
     <section style="padding:clamp(48px,6vw,96px) clamp(20px,5vw,64px)">
@@ -1477,6 +1484,21 @@ class Component extends DCLogic {
   navTo(e, page) { if (this.plainClick(e)) this.go(page); }
   navToCategory(e, id, anchor) { if (this.plainClick(e)) this.goMenuCategory(id, anchor); }
 
+  // "Discover Aralikatte": once the Our Story page has rendered, bring the
+  // video into view and play it. Browsers that refuse sound without a direct
+  // tap (iOS Safari) still play it, muted; the controls can unmute it.
+  playStoryVideo() {
+    if (typeof window === 'undefined') return;
+    const attempt = (tries) => {
+      const video = document.getElementById('story-video-player');
+      if (!video) { if (tries > 0) requestAnimationFrame(() => attempt(tries - 1)); return; }
+      video.scrollIntoView({ behavior: 'auto', block: 'center' });
+      const p = video.play();
+      if (p && p.catch) p.catch(() => { video.muted = true; video.play().catch(() => {}); });
+    };
+    requestAnimationFrame(() => attempt(60));
+  }
+
   go(page) {
     const patch = { page: page, navOpen: false };
     if (page === 'menu') { patch.cat = null; patch.q = ''; }
@@ -1715,6 +1737,7 @@ class Component extends DCLogic {
       goHome: (e) => this.navTo(e, 'home'),
       goMenu: (e) => this.navTo(e, 'menu'),
       goStory: (e) => this.navTo(e, 'story'),
+      playStory: (e) => { if (this.plainClick(e)) { this.go('story'); this.playStoryVideo(); } },
       goGallery: (e) => this.navTo(e, 'gallery'),
       goContact: (e) => this.navTo(e, 'contact'),
       toggleNav: () => this.setState((st) => ({ navOpen: !st.navOpen })),

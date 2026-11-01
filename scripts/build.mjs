@@ -302,6 +302,8 @@ async function snapshotFor(browser, port, r) {
   await pn.close();
   const pw = await render(browser, port, r, 1440);
   const html = await pw.evaluate((narrow) => {
+    // React sets <video controls> as a property, which outerHTML would drop
+    document.querySelectorAll('#dc-root video').forEach((v) => { if (v.controls) v.setAttribute('controls', ''); });
     const clone = document.getElementById('dc-root').cloneNode(true);
     // content is shown fully in the snapshot: drop the entrance-animation start state
     clone.querySelectorAll('[data-reveal]').forEach((el) => {
